@@ -7,6 +7,30 @@ const PBtn = styled.button`
   padding: 0.75rem 1.5rem;
   color: ${props => props.inverted ? props.theme.primary : props.theme.body};
   width: fit-content;
+  position: relative;
+  overflow: hidden;
+
+  // ripple effect on hover
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%; 
+    transform: translate(-50%, -50%);
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background-color: ${props => props.inverted ? props.theme.primary : props.theme.body};
+    opacity: 0.3;
+    transition: all 0.3s ease;
+    filter: blur(4px);
+  }
+
+  &:hover::after {
+    width: 200px;
+    height: 200px;
+  }
+
 `
 const Text = styled.p`
   font-size: 21px;

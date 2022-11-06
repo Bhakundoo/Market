@@ -36,7 +36,7 @@ export default createGlobalStyle`
 
     @media (max-width: 800px) {
         h1{
-            font-size: 45px;
+            font-size: 42px;
         }
         h2{
             font-size: 21px;
@@ -53,7 +53,7 @@ export default createGlobalStyle`
     }
     @media (max-width: 425px) {
         h1{
-            font-size: 36px;
+            font-size: 30px;
         }
         h2{
             font-size: 18px;

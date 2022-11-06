@@ -1,8 +1,9 @@
 import Head from 'next/head'
 import Image from 'next/image'
+
 import Carousel from '../components/HomeComponents/Carousel'
-import Card from '../components/HomeComponents/Categories/Card'
 import Index from '../components/HomeComponents/Categories/Index'
+import Products from '../components/HomeComponents/ProductComponent/Products'
 
 import HeadSEO from '../layout/HeadSEO'
 
@@ -17,6 +18,7 @@ export default function Home() {
       <maiin className='max-w-[1366px] flex-1 mx-auto flex flex-col gap-y-16'>
         <Carousel />
         <Index />
+        <Products />
       </maiin>
     </>
   )
