@@ -3,9 +3,10 @@ import styled from 'styled-components'
 
 const PBtn = styled.button`
   border-radius: 6px;
-  background-color: ${props => props.theme.primary};
+  background-color: ${props => props.inverted ? props.theme.body : props.theme.primary};
   padding: 0.75rem 1.5rem;
-  color: ${props => props.theme.body};
+  color: ${props => props.inverted ? props.theme.primary : props.theme.body};
+  width: fit-content;
 `
 const Text = styled.p`
   font-size: 21px;
@@ -45,16 +46,16 @@ const IBtn = styled.button`
     background-color: ${props => props.theme.primary}75;
   }
 `
-const PrimaryButton = ({ text }) => {
+const PrimaryButton = ({ text, additionalClass, inverted }) => {
   return (
-    <PBtn>
+    <PBtn className={`${additionalClass}`} inverted={inverted}>
         {text}
     </PBtn>
   )
 }
-const SecondaryButton = ({ text }) => {
+const SecondaryButton = ({ text, additionalClass }) => {
   return (
-    <btn className='bg-transparent py-4 w-fit border-none'>
+    <btn className={`bg-transparent py-4 w-fit border-none ${additionalClass}`}>
       <Text className='italic underline underline-offset-2'>{text}</Text>
     </btn>
   )

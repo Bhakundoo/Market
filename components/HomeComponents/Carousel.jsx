@@ -29,7 +29,7 @@ const Carousel = () => {
   };
 
   return (
-    <div className='w-full h-[80vh] lg:h-[700px] flex flex-col py-4 relative overflow-hidden'>
+    <div className='w-full h-[80vh] lg:h-[750px] flex flex-col py-4 relative overflow-hidden'>
       <SlideWrapper slideIndex={slideIndex}>
         {
           featuredProducts.map((item, index) => (
