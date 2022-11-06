@@ -1,0 +1,26 @@
+export const themes = {
+    light: {
+        dark: false,
+        body: '#f9f9f9',
+        body_secondary: '#f8f4ff',
+        text: '#2a2a2a',
+        primary: '#242424',
+        secondary: '#7544d4',
+        black: '#242424',
+        white: '#fff',
+        fade_secondary: '#eeeeee',
+        fade: '#16213E80',
+    },
+    dark: {
+        dark: true,
+        body: '#2a2a2a',
+        body_secondary: '#2f1b55',
+        text: '#f9f9f9',
+        primary: '#8C52FF',
+        secondary: '#7544d4',
+        black: '#242424',
+        white: '#fff',
+        fade_secondary: '#16213E35',
+        fade: '#f9f9f980',
+    },
+}
