@@ -80,7 +80,7 @@ const PrimaryButton = ({ text, additionalClass, inverted }) => {
 const SecondaryButton = ({ text, additionalClass }) => {
   return (
     <btn className={`bg-transparent py-4 w-fit border-none ${additionalClass}`}>
-      <Text className='italic underline underline-offset-2'>{text}</Text>
+      <Text className='italic font-semibold underline underline-offset-2'>{text}</Text>
     </btn>
   )
 }

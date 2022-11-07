@@ -7,7 +7,6 @@ import { useThemeContext } from '../context/ThemeContextProvider'
 
 import { themes } from '../context/Themes'
 import Global from '../styles/Global'
-import Footer from './Footer'
 import Navbar from './Navbar'
 
 const Root = styled.div`
@@ -36,7 +35,6 @@ const Layout = ({ children }) => {
         <div className='w-full min-h-screen gap-y-12 px-4'>
           <Navbar />
           { children }
-          <Footer />    
         </div>
       </Root>
     </ThemeProvider>

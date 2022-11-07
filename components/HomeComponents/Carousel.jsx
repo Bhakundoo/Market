@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { FaAngleLeft } from 'react-icons/fa'
 import styled from 'styled-components'
@@ -29,7 +29,7 @@ const Carousel = () => {
   };
 
   return (
-    <div className='w-full h-[80vh] lg:h-[750px] flex flex-col py-4 relative overflow-hidden'>
+    <div className={`w-full flex flex-col py-4 relative overflow-hidden`}>
       <SlideWrapper slideIndex={slideIndex}>
         {
           featuredProducts.map((item, index) => (
@@ -44,7 +44,7 @@ const Carousel = () => {
         }
       </SlideWrapper>
 
-      <div className='lg:absolute bottom-0 right-0 flex gap-x-4'>
+      <div className='lg:absolute bottom-12 right-0 flex gap-x-4'>
         <IconButton
           icon={<FaAngleLeft className='text-[21px]' />}
           onClick={() => handleClick('left')}
