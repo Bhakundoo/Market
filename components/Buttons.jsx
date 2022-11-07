@@ -77,11 +77,11 @@ const PrimaryButton = ({ text, additionalClass, inverted }) => {
     </PBtn>
   )
 }
-const SecondaryButton = ({ text, additionalClass }) => {
+const SecondaryButton = ({ text, additionalClass, onClick }) => {
   return (
-    <btn className={`bg-transparent py-4 w-fit border-none ${additionalClass}`}>
+    <button className={`bg-transparent py-4 w-fit border-none ${additionalClass}`} onClick={onClick}>
       <Text className='italic font-semibold underline underline-offset-2'>{text}</Text>
-    </btn>
+    </button>
   )
 }
 const IconButton = ({ icon, additionalClass, onClick }) => {

@@ -21,12 +21,15 @@ const Carousel = () => {
 
   const handleClick = (direction) => {
     if(direction === "left"){
-        setSlideIndex(slideIndex > 0 ? slideIndex - 1 : 2)
+      setSlideIndex(slideIndex > 0 ? slideIndex - 1 : 2)
     }
     else{
-        setSlideIndex(slideIndex < 2 ? slideIndex + 1 : 0)
+      setSlideIndex(slideIndex < 2 ? slideIndex + 1 : 0)
     }
   };
+  const handleNavigate = (slug) => {
+    router.push(`/product/${slug}`)
+  }
 
   return (
     <div className={`w-full flex flex-col py-4 relative overflow-hidden`}>
@@ -39,6 +42,7 @@ const Carousel = () => {
               name={item.name}
               category_title={item.category}
               img={item.img}
+              link={item.slug}
             />
           ))
         }

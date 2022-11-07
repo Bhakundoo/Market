@@ -1,10 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react'
+import { useRouter } from 'next/router'
 
 import BigText from '../../BigText'
 import { SecondaryButton } from '../../Buttons'
 
-const Featured = ({ text, category_title, name, img}) => {
+const Featured = ({ text, category_title, name, img, link }) => {
+  const router = useRouter();
   return (
       <div className='w-full flex-shrink-0 h-[70vh] lg:h-[600px] relative flex flex-col justify-between py-4'>
         <BigText text={text} additionalClass='text-center' />
@@ -15,7 +17,7 @@ const Featured = ({ text, category_title, name, img}) => {
             <div className='flex flex-col'>
                 <p className='italic opacity-60'>{category_title}</p>
                 <h1>{name}</h1>
-                <SecondaryButton text='Shop Now' />
+                <SecondaryButton text='Shop Now' onClick={() => router.push(`/product/${link}`)}/>
             </div>
         </div>
 

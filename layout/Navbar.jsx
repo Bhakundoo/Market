@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import { CiShare1, CiSearch } from 'react-icons/ci'
 import { BsHandbag } from 'react-icons/bs'
 import { PrimaryButton } from '../components/Buttons'
+import Link from 'next/link'
 
 const Nav = styled.nav`
     background-color: ${props => props.theme.body};
@@ -78,9 +79,11 @@ const Navbar = () => {
 
     return (
         <Nav className='max-w-[1366px] mx-auto py-4 flex justify-between items-center sticky top-0 mb-12'>
-            <div className='h-6'>
-                <img src='/logo/light.jpg' alt='logo' className='h-full w-auto mix-blend-multiply' />
-            </div>
+            <Link href='/'>
+                <div className='h-6'>
+                    <img src='/logo/light.jpg' alt='logo' className='h-full w-auto mix-blend-multiply' />
+                </div>
+            </Link>
 
             <SearchWrapper className='hidden lg:flex'>
                 <input 

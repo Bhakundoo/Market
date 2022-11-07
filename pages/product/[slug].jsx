@@ -146,7 +146,7 @@ const ProductDetail = () => {
                             </div>
                         </div>
 
-                        <div className='flex flex-col gap-y-4'>1
+                        <div className='flex flex-col gap-y-4'>
                             <h2>Sizes</h2>
                             <div className='flex gap-x-4 flex-wrap'>
                                 {product.sizes.map((size, index) => (
