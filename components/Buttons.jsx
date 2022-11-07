@@ -6,7 +6,6 @@ const PBtn = styled.button`
   background-color: ${props => props.inverted ? props.theme.body : props.theme.primary};
   padding: 0.75rem 1.5rem;
   color: ${props => props.inverted ? props.theme.primary : props.theme.body};
-  width: fit-content;
   position: relative;
   overflow: hidden;
 

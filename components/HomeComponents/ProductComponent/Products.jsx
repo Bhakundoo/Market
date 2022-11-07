@@ -30,7 +30,8 @@ const Products = () => {
               key={index}
               img={product.img} 
               name={product.name}
-              price={product.price}  
+              price={product.price} 
+              link={product.name} 
             />
           ))
         }

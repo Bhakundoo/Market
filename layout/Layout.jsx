@@ -1,8 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-page-custom-font */
 import Head from 'next/head'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled, { ThemeProvider } from 'styled-components'
+import CartModal from '../components/CartModal'
 import { useThemeContext } from '../context/ThemeContextProvider'
 
 import { themes } from '../context/Themes'
@@ -15,6 +16,7 @@ const Root = styled.div`
 `
 const Layout = ({ children }) => {
   const { theme, setTheme } = useThemeContext();
+  const [showCart, setShowCart] = useState(false);
 
   useEffect(() => {
     const darkMode = localStorage.getItem('dark');
@@ -33,7 +35,8 @@ const Layout = ({ children }) => {
       <Global />
       <Root>
         <div className='w-full min-h-screen gap-y-12 px-4'>
-          <Navbar />
+          <CartModal show={showCart} onClose={() => setShowCart(false)} />
+          <Navbar handleCart={() => setShowCart(true)} />
           { children }
         </div>
       </Root>

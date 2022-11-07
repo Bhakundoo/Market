@@ -11,7 +11,7 @@ import Link from 'next/link'
 
 const Nav = styled.nav`
     background-color: ${props => props.theme.body};
-    z-index: 100;
+    z-index: 90;
 `
 const ListItems = styled.li`
     list-style: none;
@@ -64,7 +64,7 @@ const SearchWrapper = styled.div`
         }
     }
 `
-const Navbar = () => {
+const Navbar = ({ handleCart }) => {
     const router = useRouter();
     const cartItems = 0;
 
@@ -102,8 +102,8 @@ const Navbar = () => {
                         <p>Leagues</p>
                     </ListItems>
                     
-                    <ListItems active={getActive('/database')}>
-                        <div className='relative'>
+                    <ListItems>
+                        <div className='relative cursor-pointer' onClick={handleCart}>
                             <BsHandbag />
                             <span className='absolute -top-1 -right-1 bg-red-500 rounded-full w-4 h-4 text-white font-medium flex items-center justify-center text-[14px]'>{cartItems}</span>
                         </div>

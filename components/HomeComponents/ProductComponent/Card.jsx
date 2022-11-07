@@ -3,6 +3,7 @@ import Image from 'next/image'
 import styled from 'styled-components'
 
 import { AiOutlineHeart } from 'react-icons/ai'
+import { useRouter } from 'next/router'
 
 const Container = styled.div`
     box-shadow: rgba(33, 35, 38, 0.1) 0px 10px 10px -10px;
@@ -25,9 +26,11 @@ const ImageWrapper = styled.div`
     }
 `
 
-const Card = ({ img, name, price }) => {
+const Card = ({ img, name, price, link }) => {
+    const router = useRouter()
+
     return (
-        <Container className='w-full md:w-56 flex flex-col gap-4'>
+        <Container className='w-full md:w-56 flex flex-col gap-4' onClick={() => router.push(`/product/${link}`)}>
             <ImageWrapper className='w-auto h-64'>
                 <Image id='img' src={img} alt={'jersey'} layout='fill' objectFit='contain' className='absolute mix-blend-multiply' />
             </ImageWrapper>
