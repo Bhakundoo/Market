@@ -33,6 +33,11 @@ export default createGlobalStyle`
         font-size: 16px;
         font-weight: 400;
     }
+    label {
+        font-size: 16px;
+        font-weight: 300;
+        opacity: 0.6;
+    }
 
     @media (max-width: 800px) {
         h1{
@@ -50,6 +55,9 @@ export default createGlobalStyle`
         span {
             font-size: 14px;
         }
+        label {
+            font-size: 14px;
+        }
     }
     @media (max-width: 425px) {
         h1{
@@ -65,6 +73,9 @@ export default createGlobalStyle`
             font-size: 12px;
         }
         span {
+            font-size: 12px;
+        }
+        label {
             font-size: 12px;
         }
     }

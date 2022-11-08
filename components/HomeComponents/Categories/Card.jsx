@@ -30,7 +30,7 @@ const Card = ({ img, heading, desc }) => {
             <div className='flex flex-col justify-end h-full px-8 py-4'>
                 <h1 className='text-white'>{heading}</h1>
                 <p className='text-white'>{desc}</p>
-                <PrimaryButton text='Shop Now' additionalClass='mt-4' inverted={true}/>
+                <PrimaryButton text='Shop Now' additionalClass='mt-4 w-fit' inverted={true}/>
             </div>
         </Overlay>
     </Container>

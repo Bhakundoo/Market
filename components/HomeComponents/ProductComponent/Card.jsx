@@ -36,7 +36,7 @@ const Card = ({ img, name, price, link }) => {
             </ImageWrapper>
 
             <div className='flex flex-col'>
-                <p className='truncate'>{name}</p>
+                <p className='truncate capitalize'>{name}</p>
                 <div className='flex justify-between items-center'>
                     <div className='flex gap-x-2'>
                         <h2>Rs.</h2>

@@ -2,35 +2,36 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const Summary = styled.div`
-  background-color: ${({ theme }) => theme.white};
-  border-radius: 8px;
-  padding: 0 1.5rem 1.5rem 1.5rem;
+export const Summary = styled.div`
+    background-color: ${({ theme }) => theme.white};
+    border-radius: 8px;
+    padding: 0 1.5rem 1.5rem 1.5rem;
 `
-const Personal = styled.div`
-  width: 75%;
-  margin: 0 auto;
-  padding: 1.5rem 1rem;
-  background-color: ${({ theme }) => theme.body};
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  border-radius: 0 0 8px 8px;
-  justify-content: end;
-  align-items: center;
+export const Personal = styled.div`
+    width: 75%;
+    margin: 0 auto;
+    padding: 1.5rem 1rem;
+    background-color: ${({ theme }) => theme.body};
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    border-radius: 0 0 8px 8px;
+    justify-content: end;
+    align-items: center;
 `
-const Total = styled.div`
-  width: 75%;
-  margin: 0 auto;
-  padding: 1.5rem 1rem;
-  border-top: 1px dashed ${({ theme }) => theme.primary}25;
-  display: flex;
-  justify-content: space-between;
+export const Total = styled.div`
+    width: 75%;
+    margin: 0 auto;
+    padding: 1.5rem 1rem;
+    border-top: 1px dashed ${({ theme }) => theme.primary}25;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 `
 
 const UserSummary = ({ phone, firstName, lastName, avatar }) => {
   return (
-    <Summary className='flex-[0.5] flex flex-col  gap-8'>
+    <Summary className='hidden lg:flex flex-[0.5] h-max flex-col gap-8'>
         <Personal>
         <img src={avatar} alt={firstName + lastName} className='w-28 h-28 rounded-full mx-auto' />
         <div className='flex flex-col items-center'>

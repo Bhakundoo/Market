@@ -1,11 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState } from 'react'
 import styled from 'styled-components'
+
+import Form from '../../components/CheckoutComponents/Form'
+import UserModal from '../../components/CheckoutComponents/UserModal'
 import UserSummary from '../../components/CheckoutComponents/UserSummary'
 
 import HeadSEO from '../../layout/HeadSEO'
 
 const Checkout = () => {
+  const [open, setOpen] = useState(false)
+
   const [user, setUser] = useState({
     firstName: 'Hu',
     lastName: 'Tao',
@@ -24,10 +29,10 @@ const Checkout = () => {
         description="Checkout page"
       />
       <main className='max-w-[1366px] mx-auto'>
-        <div className='flex justify-between gap-x-12'>
-          <div className='flex-1'>
-
-          </div>
+        <div className='w-full h-[80vh] flex justify-between gap-x-12 overflow-hidden'>
+          <Form 
+            onOpen={() => setOpen(true)}
+          />
           <UserSummary
             firstName={user.firstName}
             lastName={user.lastName}
@@ -35,6 +40,18 @@ const Checkout = () => {
             avatar={user.avatar}
           />
         </div>
+
+        {
+          open &&
+          <UserModal
+            firstName={user.firstName}
+            lastName={user.lastName}
+            phone={user.phone}
+            avatar={user.avatar}
+            show={open}
+            onClose={() => setOpen(false)}
+          />
+        }
       </main>
     </>
   )

@@ -54,7 +54,7 @@ const Sizes = styled.button`
 
 const ProductDetail = () => {
     const [product, setProduct] = useState({
-        name: 'Brazil World Cup 2022/23 Kit',
+        name: 'brasil World Cup 2022/23 Kit',
         price: 1000,
         img: '/jerseys/brazil/home.webp',
         rating: 4.5,

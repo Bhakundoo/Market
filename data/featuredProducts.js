@@ -1,10 +1,10 @@
 export const featuredProducts = [
     {
         id: 1,
-        name: 'Brazil World Cup 2022/23 Kit',
+        name: 'brasil World Cup 2022/23 Kit',
         category: 'World Cup Special',
         img: '/jerseys/brazil/home.webp',
-        slug: 'WC22-01ABQGA5-BRAZIL'
+        slug: 'WC22-01ABQGA5-brasil'
     },
     {
         id: 2,

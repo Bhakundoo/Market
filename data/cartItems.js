@@ -1,7 +1,7 @@
 export const cartItems = [
     {
         id: 1,
-        name: 'Brazil World Cup 2022/23 Kit',
+        name: 'Brasil World Cup 2022/23 Kit',
         price: 1000,
         category: 'World Cup Special',
         img: '/jerseys/brazil/home.webp',
