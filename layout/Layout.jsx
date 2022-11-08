@@ -35,7 +35,7 @@ const Layout = ({ children }) => {
       <Global />
       <Root>
         <div className='w-full min-h-screen gap-y-12 px-4'>
-          <CartModal show={showCart} onClose={() => setShowCart(false)} />
+          <CartModal show={showCart} onClose={() => setShowCart(false)} setShow={setShowCart}/>
           <Navbar handleCart={() => setShowCart(true)} />
           { children }
         </div>

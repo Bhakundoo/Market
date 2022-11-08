@@ -69,9 +69,9 @@ const IBtn = styled.button`
     background-color: ${props => props.theme.primary}75;
   }
 `
-const PrimaryButton = ({ text, additionalClass, inverted }) => {
+const PrimaryButton = ({ text, additionalClass, inverted, onClick }) => {
   return (
-    <PBtn className={`${additionalClass}`} inverted={inverted}>
+    <PBtn className={`${additionalClass}`} inverted={inverted} onClick={onClick}>
         {text}
     </PBtn>
   )

@@ -1,5 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
+
 import styled from 'styled-components'
 
 import { AiOutlineClose, AiOutlineDelete } from 'react-icons/ai'
@@ -104,7 +106,9 @@ const Quantity = styled.div`
     }
 `
 
-const CartModal = ({ show, onClose }) => {
+const CartModal = ({ show, onClose, setShow }) => {
+    const router = useRouter()
+
     const [products, setProducts] = useState(cartItems)
 
     const changeQuantity = (e) => {
@@ -177,7 +181,7 @@ const CartModal = ({ show, onClose }) => {
                         </div>
                     </div>
 
-                    <PrimaryButton inverted={false} additionalClass={'w-full'} text='Checkout' />
+                    <PrimaryButton inverted={false} additionalClass={'w-full'} text='Checkout' onClick={() => {router.push('/checkout'); setShow(false)}}/>
                 </div>
             </Cart>
         </Backdrop>

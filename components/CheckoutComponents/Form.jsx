@@ -32,12 +32,18 @@ const Input = styled.input`
     }
 `
 
-const Form = ({ onOpen }) => {
+const Form = ({ onOpen, dstate, dcity, dstreet }) => {
+    const [address, setAddress] = useState({
+        state: '',
+        city: '',
+        street: '',
+    })
+
     return (
         <Container className='flex-1 flex flex-col gap-y-12 overflow-auto'>
             <div className='flex items-center justify-between'>
                 <h1>Checkout</h1>
-                <AiOutlineInfoCircle className='text-[24px]' onClick={onOpen}/>
+                <AiOutlineInfoCircle className='text-[24px] lg:hidden' onClick={onOpen}/>
             </div>
             <div className='flex flex-col gap-y-8'>
                 <h2>Product Information</h2>
@@ -60,28 +66,45 @@ const Form = ({ onOpen }) => {
                 </div>
             </div>
             <div className='flex flex-col gap-y-8'>
-                <h2>Shipping Information</h2>
+                <div className='flex items-center justify-between'>
+                    <h2>Shipping Information</h2>
+                    <p 
+                        className='underline italic cursor-pointer'
+                        onClick={() => setAddress({
+                            state: dstate,
+                            city: dcity,
+                            street: dstreet,
+                        })}
+                    >
+                        Use Registered Address</p>
+                </div>
                 <form className='flex flex-col gap-y-4'>
                     <div className='flex flex-col md:flex-row gap-8 flex-wrap'>
                         <div className='flex flex-col'>
-                            <label htmlFor='name'>State</label>
+                            <label htmlFor='state'>State</label>
                             <Input 
                                 type='text'
-                                id='name'
+                                id='state'
+                                value={address.state}
+                                onChange={e => setAddress({...address, state: e.target.value})}
                             />
                         </div>
                         <div className='flex flex-col'>
-                            <label htmlFor='name'>City</label>
+                            <label htmlFor='city'>City</label>
                             <Input 
                                 type='text'
-                                id='name'
+                                id='city'
+                                value={address.city}
+                                onChange={e => setAddress({...address, city: e.target.value})}
                             />
                         </div>
                         <div className='flex flex-col'>
-                            <label htmlFor='name'>Street</label>
+                            <label htmlFor='street'>Street</label>
                             <Input 
                                 type='text'
-                                id='name'
+                                id='street'
+                                value={address.street}
+                                onChange={e => setAddress({...address, street: e.target.value})}
                             />
                         </div>
                     </div>

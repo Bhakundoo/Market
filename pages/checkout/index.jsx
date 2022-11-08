@@ -32,6 +32,9 @@ const Checkout = () => {
         <div className='w-full h-[80vh] flex justify-between gap-x-12 overflow-hidden'>
           <Form 
             onOpen={() => setOpen(true)}
+            dcity={user.city}
+            dstate={user.state}
+            dstreet={user.street}
           />
           <UserSummary
             firstName={user.firstName}
