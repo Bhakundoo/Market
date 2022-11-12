@@ -1,10 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useState } from 'react'
+import styled from 'styled-components'
+import { useSelector, useDispatch } from 'react-redux'
 
 import { FaAngleLeft } from 'react-icons/fa'
-import styled from 'styled-components'
 
-import { featuredProducts } from '../../data/featuredProducts'
+import { getFeaturedProducts } from '../../redux/apiCalls'
 import { IconButton } from '../Buttons'
 import Featured from './CarouselComponent/Featured'
 
@@ -17,6 +18,10 @@ const SlideWrapper = styled.div`
 `
 
 const Carousel = () => {
+  const { isFetching, featured } = useSelector(state => state.featured)
+
+  const dispatch = useDispatch();
+
   const [slideIndex, setSlideIndex] = useState(0);
 
   const handleClick = (direction) => {
@@ -27,21 +32,22 @@ const Carousel = () => {
       setSlideIndex(slideIndex < 2 ? slideIndex + 1 : 0)
     }
   };
-  const handleNavigate = (slug) => {
-    router.push(`/product/${slug}`)
-  }
+
+  useEffect(() => {
+    getFeaturedProducts(dispatch);
+  }, [dispatch])
 
   return (
     <div className={`w-full flex flex-col py-4 relative overflow-hidden`}>
       <SlideWrapper slideIndex={slideIndex}>
         {
-          featuredProducts.map((item, index) => (
+          featured.map((item, index) => (
             <Featured
               key={index}
               text={(item.name).split(' ')[0]}
               name={item.name}
-              category_title={item.category}
-              img={item.img}
+              category_title={item.category.name}
+              img={item.gallery[0].image}
               link={item.slug}
             />
           ))

@@ -1,14 +1,17 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 import styled from 'styled-components';
 
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
 
 import Tabbar from '../../components/ProductComponent/Tab/Tabbar';
 import HeadSeo from '../../layout/HeadSEO';
+import { useDispatch, useSelector } from 'react-redux';
+import { getProjectDetails } from '../../redux/apiCalls';
 
 const ColoredText = styled.p`
-    color: ${props => props.stock ? '#FF0000' : '#00B87C'};
+    color: ${props => props.stock ? '#FF0000' : '#ef4148'};
     font-weight: 500;
     font-size: 16px;
 
@@ -53,31 +56,28 @@ const Sizes = styled.button`
 `
 
 const ProductDetail = () => {
-    const [product, setProduct] = useState({
-        name: 'brasil World Cup 2022/23 Kit',
-        price: 1000,
-        img: '/jerseys/brazil/home.webp',
-        rating: 4.5,
-        numReviews: 10,
-        variants: ['Home', 'Away', 'Third', 'Keeper'],
-        sizes: ['S', 'M', 'L', 'XL', 'XXL'],
-        category: 'National Kit',
-        stock: 10,
-    });
+    const { productDesc, isFetching } = useSelector(state => state.products);
+    console.log(productDesc);
+    const dispatch = useDispatch();
+
+    const router = useRouter();
+    const { slug } = router.query;
+    useEffect(() => {
+        getProjectDetails(dispatch, slug);
+    }, [dispatch, slug])
 
     const [selectedVariant, setSelectedVariant] = useState({
-        size: 'S',
-        variant: 'Home',
+        size: productDesc?.sizes[0],
+        variant: productDesc?.variations[0],
     });
 
-    
     const [quantity, setQuantity] = useState(null);
     const changeValue = (e) => {
         if(e.target.value < 0) {
             e.target.value = 0;
         }
-        else if (e.target.value > product.stock) {
-            e.target.value = product.stock;
+        else if (e.target.value > productDesc.stock) {
+            e.target.value = productDesc.stock;
         }
         setQuantity(e.target.value);
     }
@@ -85,8 +85,8 @@ const ProductDetail = () => {
         if(quantity < 0) {
             setQuantity(0);
         }
-        if (quantity > product.stock) {
-            setQuantity(product.stock);
+        if (quantity > productDesc.stock) {
+            setQuantity(productDesc.stock);
         }
         else {
             setQuantity(quantity + 1);
@@ -101,55 +101,63 @@ const ProductDetail = () => {
         }
     }
 
+    if(isFetching) {
+        return (
+            <div className='flex justify-center items-center h-screen'>
+                Loading...
+            </div>
+        )
+    }
+
     return (
         <>
             <HeadSeo 
-                title={product.name}
-                description={`Buy ${product.name} from Bhakundoo Market.`}
+                title={productDesc?.name}
+                description={`Buy ${productDesc?.name} from Bhakundoo Market.`}
             />
 
             <div className='w-full min-h-[650px] relative'>
                 <div className='w-full lg:w-[1366px] h-full mx-auto flex flex-col lg:flex-row gap-y-8 gap-x-16 mb-40'>
                     <div className='lg:flex-1 place-self-center'>
-                        <img src={product.img} alt={product.name} layout='fill' objectFit='contain' className='w-auto h-[200px] lg:h-[500px]'/>
+                        <img src={productDesc?.gallery[0].image} alt={productDesc?.name} layout='fill' objectFit='contain' className='w-auto h-[200px] lg:h-[500px]'/>
                     </div>
 
                     <div className='lg:flex-1 flex flex-col gap-y-8'>
                         <div className='pb-4 border-b-[1px] border-b-[#14141515]'>
-                            <h1>{product.name}</h1>
+                            <h1>{productDesc?.name}</h1>
                             <div className='flex justify-between'>
-                                <p>{product.category}</p>
-                                <ColoredText color={product.stock > 0}>{product.stock > 0 ? 'In Stock' : 'Out of Stock'}</ColoredText>
+                                <p>{productDesc?.category.name}</p>
+                                <ColoredText color={productDesc?.stock > 0 ? true : false}>{productDesc?.stock > 0 ? 'In Stock' : 'Out of Stock'}</ColoredText>
                             </div>
                         </div>
 
                         <div className='flex flex-col gap-y-4'>
                             <h2>Ratings</h2>
                             <div className='flex gap-x-4 flex-wrap'>
-                                <div className='flex items-center gap-x-2'>
+                                {/* <div className='flex items-center gap-x-2'>
                                     {
-                                        Array(Math.floor(product.rating))
+                                        Array(Math.floor(productDesc?.rating))
                                         .fill()
                                         .map((_, i) => (
                                             <AiFillStar key={i} className='w-5 h-5 text-yellow-400'/>
                                         ))
                                     }
                                     {
-                                        Array(5 - Math.floor(product.rating))
+                                        Array(5 - Math.floor(productDesc?.rating))
                                         .fill()
                                         .map((_, i) => (
                                             <AiOutlineStar key={i} className='w-5 h-5 text-yellow-400'/>
                                         ))
                                     }
-                                    <p>{product.rating}</p>
-                                </div>
+                                    <p>{productDesc?.rating}</p>
+                                </div> */}
                             </div>
                         </div>
 
                         <div className='flex flex-col gap-y-4'>
                             <h2>Sizes</h2>
                             <div className='flex gap-x-4 flex-wrap'>
-                                {product.sizes.map((size, index) => (
+                                {productDesc?.sizes.map((size, index) => (
                                     <Sizes 
                                         selected={size === selectedVariant.size} 
                                         key={index} 
@@ -165,7 +173,7 @@ const ProductDetail = () => {
                         <div className='flex flex-col gap-y-4'>
                             <h2>Variants</h2>
                             <div className='flex gap-x-4'>
-                                {product.variants.map((variant, index) => (
+                                {productDesc?.variations.map((variant, index) => (
                                     <Sizes
                                         key={index}
                                         selected={variant.toLocaleLowerCase() === (selectedVariant.variant).toLocaleLowerCase()}
@@ -181,7 +189,7 @@ const ProductDetail = () => {
                 </div>
 
                 <Tabbar 
-                    price={product.price} 
+                    price={productDesc?.price} 
                     quantity={quantity}
                     changeQuantity={changeValue}
                     handleIncrease={increase}

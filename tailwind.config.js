@@ -9,7 +9,21 @@ module.exports = {
     join(__dirname, './layout/**/*.{js,ts,jsx,tsx}'),
   ],
   theme: {
-    extend: {},
+    extend: {
+      keyframes: {
+        'shimmer': {
+          '0%': {
+            backgroundPosition: '-200px 0',
+          },
+          '100%': {
+            backgroundPosition: 'calc(200px + 100%) 0',
+          },
+        }
+      },
+      animation: {
+        'shimmer': 'shimmer 1.5s infinite linear',
+      },
+    },
   },
   plugins: [],
 }
