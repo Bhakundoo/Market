@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-
+import axiosInstance from '../../utils/axios.config'
 import { AiOutlineClose, AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import { PrimaryButton, TextButton } from '../Buttons'
+import { GoogleLogin } from 'react-google-login';
 
 const Input = styled.input`
     font-size: 16px;
@@ -24,7 +25,17 @@ const Login = ({ onClose, handleRegister }) => {
         password: ''
     })
     const [show, setShow] = useState(false)
-
+    const responseGoogle = async (response) => {
+        try {
+            
+            console.log(response.tokenId);
+            alert('Login Success')
+            
+        } catch (err) {
+            console.log(err);
+           
+        }
+    }
     return (
         <div className='flex flex-col gap-y-8'>
             <div className='flex justify-between items-center'>
@@ -53,10 +64,18 @@ const Login = ({ onClose, handleRegister }) => {
                         }
                     </div>
                 </div>
-
                 <PrimaryButton text='Login' additionalClass='mt-8'/>
-
                 <TextButton text='Create an account' onClick={handleRegister}/>
+
+
+                {/* Google login */}
+                <GoogleLogin
+                    clientId="993778502578-f3e60js9hmv8sr45aempevjha5n816kd.apps.googleusercontent.com"
+                    buttonText="Login with google"
+                    onSuccess={responseGoogle}
+                    cookiePolicy={'single_host_origin'}
+                />
+
             </form>
         </div>
     )
