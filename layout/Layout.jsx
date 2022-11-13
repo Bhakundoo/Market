@@ -34,6 +34,15 @@ const Layout = ({ children }) => {
     }
   }, [])
 
+  useEffect(() => {
+    if(show.modal === true) {
+      document.body.style.overflow = 'hidden';
+    }
+    else {
+      document.body.style.overflow = 'unset';
+    }
+  }, [show])
+
   return (
     <ThemeProvider theme={theme}>
       <Global />
