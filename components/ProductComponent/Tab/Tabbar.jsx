@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { IoRemoveOutline, IoAddOutline } from 'react-icons/io5'
 
-import { PrimaryButton } from '../../Buttons'
+import { DisabledButton, PrimaryButton } from '../../Buttons'
+import { useSelector } from 'react-redux'
 
 const Tab = styled.div`
     background-color: ${props => props.theme.primary};
@@ -52,33 +53,49 @@ const Icon = styled.div`
     }
 `
 
-const Tabbar = ({ price, quantity, changeQuantity, handleDecrease, handleIncrease }) => {
-  return (
-    <Tab className='w-full fixed bottom-0 left-1/2 -translate-x-1/2 z-20'>
-        <Wrapper className='w-full lg:w-[1366px] flex flex-col lg:flex-row gap-y-4 justify-between items-center'>
-            <div className='flex gap-x-1 items-end'>
-                <p>Rs.</p>
-                <h2 className='font-bold'>{price}</h2>
-            </div>
-            <div className='flex gap-x-8 items-center'>
-                <div className='flex gap-x-4'>
-                    <Icon onClick={handleDecrease}>
-                        <IoRemoveOutline/>
-                    </Icon>
-                    <input 
-                        type='number'
-                        value={quantity}
-                        onChange={changeQuantity}
-                    />
-                    <Icon onClick={handleIncrease}>
-                        <IoAddOutline/>
-                    </Icon>
+const Tabbar = ({ price, quantity, changeQuantity, handleDecrease, handleIncrease, onClick, slug }) => {
+    const { products } = useSelector(state => state.cart)
+
+    const [showButton, setShowButton] = useState(true)
+
+    useEffect(() => {
+        // if products includes the product, then hide the button
+        if (products.find(product => product.slug === slug)) {
+            setShowButton(false)
+        }
+    }, [products, slug])
+
+    return (
+        <Tab className='w-full fixed bottom-0 left-1/2 -translate-x-1/2 z-20'>
+            <Wrapper className='w-full lg:w-[1366px] flex flex-col lg:flex-row gap-y-4 justify-between items-center'>
+                <div className='flex gap-x-1 items-end'>
+                    <p>Rs.</p>
+                    <h2 className='font-bold'>{price}</h2>
                 </div>
-                <PrimaryButton text='Add To Cart' inverted={true} />
-            </div>
-        </Wrapper>
-    </Tab>
-  )
+                <div className='flex gap-x-8 items-center'>
+                    <div className='flex gap-x-4'>
+                        <Icon onClick={handleDecrease}>
+                            <IoRemoveOutline/>
+                        </Icon>
+                        <input 
+                            type='number'
+                            value={quantity}
+                            onChange={changeQuantity}
+                        />
+                        <Icon onClick={handleIncrease}>
+                            <IoAddOutline/>
+                        </Icon>
+                    </div>
+                    {
+                        showButton ?
+                        <PrimaryButton text='Add To Cart' inverted={true} onClick={onClick} />
+                        :
+                        <DisabledButton text='Already In Cart' />
+                    }
+                </div>
+            </Wrapper>
+        </Tab>
+    )
 }
 
 export default Tabbar

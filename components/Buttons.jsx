@@ -90,5 +90,19 @@ const IconButton = ({ icon, additionalClass, onClick }) => {
     </IBtn>
   )
 }
+const DisabledButton = ({ text, additionalClass }) => {
+  return (
+    <button className={`bg-gray-300 py-3 px-5 w-fit border-none cursor-not-allowed rounded-md text-gray-600 ${additionalClass}`}>
+      {text}
+    </button>
+  )
+}
+const TextButton = ({ text, additionalClass, onClick }) => {
+  return (
+    <button className={`bg-transparent py-4 w-fit border-none ${additionalClass}`} onClick={onClick}>
+      <p>{text}</p>
+    </button>
+  )
+}
 
-export { PrimaryButton, SecondaryButton, IconButton }
+export { PrimaryButton, SecondaryButton, IconButton, DisabledButton, TextButton }

@@ -1,14 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import { useSelector, useDispatch } from 'react-redux'
 
 import styled from 'styled-components'
 
 import { AiOutlineClose, AiOutlineDelete } from 'react-icons/ai'
 import { IoAddOutline, IoRemoveOutline } from 'react-icons/io5'
 
-import { cartItems } from '../data/cartItems'
 import { PrimaryButton } from './Buttons'
+import { removeProduct } from '../redux/features/cartSlice'
 
 const Backdrop = styled.div`
     background-color: ${props => props.theme.primary}25;
@@ -107,9 +108,10 @@ const Quantity = styled.div`
 `
 
 const CartModal = ({ show, onClose, setShow }) => {
-    const router = useRouter()
+    const { products, total } = useSelector(state => state.cart)
+    const dispatch = useDispatch()
 
-    const [products, setProducts] = useState(cartItems)
+    const router = useRouter()
 
     const changeQuantity = (e) => {
         
@@ -123,7 +125,7 @@ const CartModal = ({ show, onClose, setShow }) => {
 
     return (
         <Backdrop className='flex w-full h-screen fixed top-0 left-0 justify-end' show={show}>
-            <Cart className='h-full w-full md:w-1/2 lg:w-1/4 flex flex-col justify-between' show={show}>
+            <Cart className='h-full w-full md:w-1/2 xl:w-1/4 flex flex-col justify-between animate-slide-left' show={show}>
                 <div className='flex flex-col gap-y-16'>
                     <div className='flex justify-between items-center'>
                         <h1 className='font-normal'>Your Cart</h1>
@@ -134,7 +136,7 @@ const CartModal = ({ show, onClose, setShow }) => {
                         {
                             products.map((item, index) => (
                                 <Card key={index} className='flex gap-4 items-center'>
-                                    <img src={item.img} alt={item.name} className='w-24 h-24 flex-shrink-0 object-cover' />
+                                    <img src={item.gallery[0].image} alt={item.name} className='w-24 h-24 flex-shrink-0 object-cover' />
 
                                     <div className='w-full flex flex-col gap-y-8'>
                                         <div>
@@ -162,7 +164,7 @@ const CartModal = ({ show, onClose, setShow }) => {
                                             </Quantity>
 
                                             <Icon>
-                                                <AiOutlineDelete className='text-[21px] text-red-800'/>
+                                                <AiOutlineDelete className='text-[21px] text-red-800' onClick={() => dispatch(removeProduct(item.slug))}/>
                                             </Icon>
                                         </div>
                                     </div>
@@ -177,11 +179,11 @@ const CartModal = ({ show, onClose, setShow }) => {
                         <h2 className='font-normal'>Subtotal</h2>
                         <div className='flex items-center gap-x-2'>
                             <p className='font-light'>Rs.</p>
-                            <h1>{'3000'}</h1>
+                            <h1>{total}</h1>
                         </div>
                     </div>
 
-                    <PrimaryButton inverted={false} additionalClass={'w-full'} text='Checkout' onClick={() => {router.push('/checkout'); setShow(false)}}/>
+                    <PrimaryButton inverted={false} additionalClass={'w-full'} text='Checkout' onClick={() => {router.push('/checkout'); setShow({ ...show, cart: false})}}/>
                 </div>
             </Cart>
         </Backdrop>

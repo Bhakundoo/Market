@@ -38,6 +38,7 @@ const SkeletonBox = styled.div`
 const Products = () => {
   const { isFetching, products } = useSelector(state => state.products)
   const [currentPage, setCurrentPage] = useState(1)
+  console.log(products)
 
   const dispatch = useDispatch();
 
@@ -89,7 +90,7 @@ const Products = () => {
         }
       </div>
       
-      {
+      {/* {
         products?.length > 10 && 
         <Pagination 
           page={currentPage} 
@@ -97,7 +98,7 @@ const Products = () => {
           handlePrev={handlePrev}
           handleNext={handleNext}
         />
-      }
+      } */}
 
     </div>
   )

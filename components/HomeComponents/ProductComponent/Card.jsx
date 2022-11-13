@@ -4,6 +4,9 @@ import styled from 'styled-components'
 
 import { AiOutlineHeart } from 'react-icons/ai'
 import { useRouter } from 'next/router'
+import { addProduct } from '../../../redux/features/cartSlice'
+import { getProjectDetails } from '../../../redux/apiCalls'
+import { useDispatch } from 'react-redux'
 
 const Container = styled.div`
     box-shadow: rgba(33, 35, 38, 0.1) 0px 10px 10px -10px;
@@ -29,8 +32,14 @@ const ImageWrapper = styled.div`
 const Card = ({ img, name, price, link }) => {
     const router = useRouter()
 
+    const dispatch = useDispatch()
+    const onClick = () => {
+        router.push(`/product/${link}`);
+        getProjectDetails(dispatch, link)
+    }
+
     return (
-        <Container className='w-full md:w-56 flex flex-col gap-4' onClick={() => router.push(`/product/${link}`)}>
+        <Container className='w-full md:w-56 flex flex-col gap-4' onClick={onClick}>
             <ImageWrapper className='w-auto h-64'>
                 <Image id='img' src={img} alt={'jersey'} layout='fill' objectFit='contain' className='absolute mix-blend-multiply' />
             </ImageWrapper>

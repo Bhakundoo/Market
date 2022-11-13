@@ -3,6 +3,7 @@
 import Head from 'next/head'
 import React, { useEffect, useState } from 'react'
 import styled, { ThemeProvider } from 'styled-components'
+import Modal from '../components/Auth/Modal'
 import CartModal from '../components/CartModal'
 import { useThemeContext } from '../context/ThemeContextProvider'
 
@@ -16,7 +17,10 @@ const Root = styled.div`
 `
 const Layout = ({ children }) => {
   const { theme, setTheme } = useThemeContext();
-  const [showCart, setShowCart] = useState(false);
+  const [show, setShow] = useState({
+    modal: false,
+    cart: false,
+  });
 
   useEffect(() => {
     const darkMode = localStorage.getItem('dark');
@@ -34,9 +38,14 @@ const Layout = ({ children }) => {
     <ThemeProvider theme={theme}>
       <Global />
       <Root>
-        <div className='w-full min-h-screen gap-y-12 px-4'>
-          <CartModal show={showCart} onClose={() => setShowCart(false)} setShow={setShowCart}/>
-          <Navbar handleCart={() => setShowCart(true)} />
+        <div className='w-full min-h-screen gap-y-12 px-4 relative'>
+          {
+            show.modal && <Modal show={show.modal} setShow={setShow} onClose={() => setShow({ ...show, modal: false })}/>
+          }
+          {
+            show.cart && <CartModal show={show.cart} setShow={setShow} onClose={() => setShow({ ...show, cart: false })} />
+          }
+          <Navbar handleCart={() => setShow({ modal: false, cart: true })}  handleLogin={() => setShow({ cart: false, modal: true})} />
           { children }
         </div>
       </Root>

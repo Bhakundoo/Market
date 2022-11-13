@@ -2,7 +2,13 @@ import { createSlice } from "@reduxjs/toolkit/dist";
 
 const initialState = {
     products: [],
-    productDesc: [],
+    productDesc: {
+        _id: "",
+        category: "",
+        gallery: [],
+        sizes: [],
+        variations: [],
+    },
     isFetching: false,
     error: false,
 }

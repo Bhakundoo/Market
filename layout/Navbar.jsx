@@ -1,13 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
+import { useSelector } from 'react-redux';
 
 import styled from 'styled-components'
 
 import { CiShare1, CiSearch } from 'react-icons/ci'
 import { BsHandbag } from 'react-icons/bs'
 import { PrimaryButton } from '../components/Buttons'
-import Link from 'next/link'
 
 const Nav = styled.nav`
     background-color: ${props => props.theme.body};
@@ -64,9 +65,9 @@ const SearchWrapper = styled.div`
         }
     }
 `
-const Navbar = ({ handleCart }) => {
+const Navbar = ({ handleCart, handleLogin }) => {
+    const { quantity } = useSelector(state => state.cart)
     const router = useRouter();
-    const cartItems = 0;
 
     const [search, setSearch] = useState('');
 
@@ -105,12 +106,12 @@ const Navbar = ({ handleCart }) => {
                     <ListItems>
                         <div className='relative cursor-pointer' onClick={handleCart}>
                             <BsHandbag />
-                            <span className='absolute -top-1 -right-1 bg-red-500 rounded-full w-4 h-4 text-white font-medium flex items-center justify-center text-[14px]'>{cartItems}</span>
+                            <span className='absolute -top-1 -right-1 bg-red-500 rounded-full w-4 h-4 text-white font-medium flex items-center justify-center text-[14px]'>{quantity}</span>
                         </div>
                     </ListItems>
                 </ul>
 
-                <PrimaryButton text='Sign In' />
+                <PrimaryButton text='Sign In' onClick={handleLogin} />
             </div>
         </Nav>
     )

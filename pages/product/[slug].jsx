@@ -9,9 +9,10 @@ import Tabbar from '../../components/ProductComponent/Tab/Tabbar';
 import HeadSeo from '../../layout/HeadSEO';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProjectDetails } from '../../redux/apiCalls';
+import { addProduct } from '../../redux/features/cartSlice';
 
 const ColoredText = styled.p`
-    color: ${props => props.stock ? '#FF0000' : '#ef4148'};
+    color: ${props => props.color ? 'green' : 'red'};
     font-weight: 500;
     font-size: 16px;
 
@@ -56,49 +57,57 @@ const Sizes = styled.button`
 `
 
 const ProductDetail = () => {
-    const { productDesc, isFetching } = useSelector(state => state.products);
-    console.log(productDesc);
+    const { productDesc, isFetching } = useSelector(state => state.products);``
+    const { products } = useSelector(state => state.cart);
     const dispatch = useDispatch();
 
+    
     const router = useRouter();
     const { slug } = router.query;
-    useEffect(() => {
-        getProjectDetails(dispatch, slug);
-    }, [dispatch, slug])
 
+    // useEffect(() => {
+    //     getProjectDetails(dispatch, slug);
+    //     // console.log('Working')
+    // }, [dispatch, slug])
+    
     const [selectedVariant, setSelectedVariant] = useState({
         size: productDesc?.sizes[0],
         variant: productDesc?.variations[0],
     });
 
-    const [quantity, setQuantity] = useState(null);
+    const [quantity, setQuantity] = useState(1);
     const changeValue = (e) => {
         if(e.target.value < 0) {
             e.target.value = 0;
         }
-        else if (e.target.value > productDesc.stock) {
-            e.target.value = productDesc.stock;
+        else if (e.target.value > productDesc?.stock) {
+            e.target.value = productDesc?.stock;
         }
         setQuantity(e.target.value);
     }
     const increase = () => {
-        if(quantity < 0) {
-            setQuantity(0);
+        if(quantity < 1) {
+            setQuantity(1);
         }
-        if (quantity > productDesc.stock) {
-            setQuantity(productDesc.stock);
+        if (quantity > productDesc?.stock) {
+            setQuantity(productDesc?.stock);
         }
         else {
             setQuantity(quantity + 1);
         }
     }
     const decrease = () => {
-        if(quantity <= 0) {
-            setQuantity(0);
+        if(quantity <= 1) {
+            setQuantity(1);
         }
         else {
             setQuantity(quantity - 1);
         }
+    }
+    const addToCart = () => {
+        dispatch(addProduct({
+            productDesc, quantity
+        }))
     }
 
     if(isFetching) {
@@ -119,7 +128,7 @@ const ProductDetail = () => {
             <div className='w-full min-h-[650px] relative'>
                 <div className='w-full lg:w-[1366px] h-full mx-auto flex flex-col lg:flex-row gap-y-8 gap-x-16 mb-40'>
                     <div className='lg:flex-1 place-self-center'>
-                        <img src={productDesc?.gallery[0].image} alt={productDesc?.name} layout='fill' objectFit='contain' className='w-auto h-[200px] lg:h-[500px]'/>
+                        <img src={productDesc?.gallery[0]?.image} alt={productDesc?.name} layout='fill' objectFit='contain' className='w-auto h-[200px] lg:h-[500px]'/>
                     </div>
 
                     <div className='lg:flex-1 flex flex-col gap-y-8'>
@@ -127,7 +136,7 @@ const ProductDetail = () => {
                             <h1>{productDesc?.name}</h1>
                             <div className='flex justify-between'>
                                 <p>{productDesc?.category.name}</p>
-                                <ColoredText color={productDesc?.stock > 0 ? true : false}>{productDesc?.stock > 0 ? 'In Stock' : 'Out of Stock'}</ColoredText>
+                                <ColoredText color={productDesc?.stock > 0}>{productDesc?.stock > 0 ? 'In Stock' : 'Out of Stock'}</ColoredText>
                             </div>
                         </div>
 
@@ -194,6 +203,8 @@ const ProductDetail = () => {
                     changeQuantity={changeValue}
                     handleIncrease={increase}
                     handleDecrease={decrease}
+                    onClick={addToCart}
+                    slug={productDesc?.slug}
                 />
             </div>
         </>

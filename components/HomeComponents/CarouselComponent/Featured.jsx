@@ -4,9 +4,17 @@ import { useRouter } from 'next/router'
 
 import BigText from '../../BigText'
 import { SecondaryButton } from '../../Buttons'
+import { getProjectDetails } from '../../../redux/apiCalls'
+import { useDispatch } from 'react-redux'
 
 const Featured = ({ text, category_title, name, img, link }) => {
   const router = useRouter();
+
+  const dispatch = useDispatch();
+  const onClick = () => {
+    router.push(`/product/${link}`);
+    getProjectDetails(dispatch, link)
+  }
   return (
       <div className='w-full flex-shrink-0 h-[70vh] lg:h-[600px] relative flex flex-col justify-between py-4'>
         <BigText text={text} additionalClass='text-center uppercase' />
@@ -17,7 +25,7 @@ const Featured = ({ text, category_title, name, img, link }) => {
             <div className='flex flex-col'>
                 <p className='italic opacity-60'>{category_title}</p>
                 <h1 className='capitalize'>{name}</h1>
-                <SecondaryButton text='Shop Now' onClick={() => router.push(`/product/${link}`)}/>
+                <SecondaryButton text='Shop Now' onClick={onClick}/>
             </div>
         </div>
 
