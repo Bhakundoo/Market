@@ -2,13 +2,14 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import styled from 'styled-components'
 
 import { CiShare1, CiSearch } from 'react-icons/ci'
 import { BsHandbag } from 'react-icons/bs'
 import { PrimaryButton } from '../components/Buttons'
+import { removeToken } from '../redux/features/tokenSlice';
 
 const Nav = styled.nav`
     background-color: ${props => props.theme.body};
@@ -66,8 +67,12 @@ const SearchWrapper = styled.div`
     }
 `
 const Navbar = ({ handleCart, handleLogin }) => {
+    const { user } = useSelector(state => state.user)
+    const { isLogged } = useSelector(state => state.token)
     const { quantity } = useSelector(state => state.cart)
     const router = useRouter();
+
+    const dispatch = useDispatch();
 
     const [search, setSearch] = useState('');
 
@@ -77,6 +82,8 @@ const Navbar = ({ handleCart, handleLogin }) => {
         }
         return false;
     }
+
+    console.log(user, isLogged)
 
     return (
         <Nav className='max-w-[1366px] mx-auto py-4 flex justify-between items-center sticky top-0 mb-12'>
@@ -111,7 +118,13 @@ const Navbar = ({ handleCart, handleLogin }) => {
                     </ListItems>
                 </ul>
 
-                <PrimaryButton text='Sign In' onClick={handleLogin} />
+                {
+                    isLogged ? 
+                    // <PrimaryButton text='Logged in' onClick={() => dispatch(removeToken())} />
+                    <img src={user.avatar} className='w-12 h-12 rounded-full object-cover' alt={user.name} />
+                    :
+                    <PrimaryButton text='Sign In' onClick={handleLogin} />
+                }
             </div>
         </Nav>
     )

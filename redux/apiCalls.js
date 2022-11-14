@@ -44,3 +44,18 @@ export const getCategories = async(dispatch) => {
         dispatch(getCategoryFailure());
     }
 }
+
+// export const getUserInfo = async(dispatch, token, userInfo) => {
+//     dispatch(getUserInfoStart())
+
+//     try {
+//         const res = await axiosInstance.post("/user", {
+//             headers: {
+//                 Authorization: token
+//             }
+//         });
+//         dispatch(getUserInfoSuccess(res.data.user));
+//     } catch (err) {
+//         dispatch(getUserInfoFailure());
+//     }
+// }

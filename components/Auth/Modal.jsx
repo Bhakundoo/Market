@@ -8,6 +8,10 @@ import Login from './Login'
 import Register from './Register'
 import { AiOutlineClose, AiOutlineGoogle } from 'react-icons/ai';
 import { IconButton } from '../Buttons';
+import { storeToken } from '../../redux/features/tokenSlice';
+import { useDispatch } from 'react-redux';
+import axiosInstance from '../../utils/axios.config';
+import { getUserSuccess } from '../../redux/features/userSlice';
 
 const Backdrop = styled.div`
     background-color: ${props => props.theme.primary}25;
@@ -37,15 +41,20 @@ const Wrapper = styled.div`
 
 const Modal = ({ onClose }) => {
     // const [inLogin, setInLogin] = useState(true)
+    const dispatch = useDispatch();
     const responseGoogle = async (response) => {
         try {
-            
-            console.log(response.tokenId);
-            alert('Login Success')
-            
+            // dispatch()
+            await axiosInstance.post('/auth/google-login', { tokenId: response.tokenId })
+            dispatch(storeToken(response.tokenId))
+            dispatch(getUserSuccess({
+                name: response.profileObj.name,
+                avatar: response.profileObj.imageUrl,
+                email: response.profileObj.email
+            })) 
+            onClose()           
         } catch (err) {
             console.log(err);
-           
         }
     }
     return (
