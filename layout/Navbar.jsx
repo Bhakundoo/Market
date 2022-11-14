@@ -121,7 +121,7 @@ const Navbar = ({ handleCart, handleLogin }) => {
                 {
                     isLogged ? 
                     // <PrimaryButton text='Logged in' onClick={() => dispatch(removeToken())} />
-                    <img src={user.avatar} className='w-12 h-12 rounded-full object-cover' alt={user.name} />
+                    <img src={user.avatar} className='w-12 h-12 rounded-full object-cover' alt={user.name} onClick={() => dispatch(removeToken())}/>
                     :
                     <PrimaryButton text='Sign In' onClick={handleLogin} />
                 }

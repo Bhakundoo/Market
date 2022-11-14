@@ -1,7 +1,7 @@
 import axiosInstance from '../utils/axios.config';
 import { getCategoryFailure, getCategoryStart, getCategorySuccess } from './features/categorySlice';
 import { getFeaturedProductsFailure, getFeaturedProductsStart, getFeaturedProductsSuccess } from './features/featuredSlice';
-import { getProductDescSuccess, getProductsFailure, getProductsStart, getProductsSuccess } from "./features/productsSlice";
+import { getProductByCategorySuccess, getProductDescSuccess, getProductsFailure, getProductsStart, getProductsSuccess } from "./features/productsSlice";
 
 export const getProducts = async(dispatch) => {
     dispatch(getProductsStart())
@@ -42,6 +42,16 @@ export const getCategories = async(dispatch) => {
         dispatch(getCategorySuccess(res.data.category));
     } catch (err) {
         dispatch(getCategoryFailure());
+    }
+}
+export const getProductByCategories = async(dispatch, slug) => {
+    dispatch(getProductsStart())
+
+    try {
+        const res = await axiosInstance.get(`/products/category/${slug}`);
+        dispatch(getProductByCategorySuccess(res.data));
+    } catch (err) {
+        dispatch(getProductsFailure());
     }
 }
 

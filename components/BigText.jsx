@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 const HeadingText = styled.h1`
   width: 100%;
-  font-size: 10rem;
+  font-size: 7rem;
   letter-spacing: 3rem;
   font-weight: 700;
   color: ${props => props.theme.text};

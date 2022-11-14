@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { IoRemoveOutline, IoAddOutline } from 'react-icons/io5'
 
-import { DisabledButton, PrimaryButton } from '../../Buttons'
+import { DisabledButton, PrimaryButton, SecondaryButton } from '../../Buttons'
 import { useSelector } from 'react-redux'
 
 const Tab = styled.div`
@@ -88,7 +88,7 @@ const Tabbar = ({ price, quantity, changeQuantity, handleDecrease, handleIncreas
                     </div>
                     {
                         showButton ?
-                        <PrimaryButton text='Add To Cart' inverted={true} onClick={onClick} />
+                        <PrimaryButton text='Add To Cart' inverted={true} onClick={onClick} />   
                         :
                         <DisabledButton text='Already In Cart' />
                     }

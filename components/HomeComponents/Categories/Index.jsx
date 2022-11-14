@@ -20,6 +20,7 @@ const Index = () => {
             key={index} 
             img={item.image} 
             heading={item.name} 
+            slug={item.slug}
           />
         ))
       }

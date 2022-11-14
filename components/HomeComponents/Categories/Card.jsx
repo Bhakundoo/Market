@@ -1,6 +1,11 @@
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import React from 'react'
+import { useDispatch } from 'react-redux'
+
 import styled from 'styled-components'
+import { getProductByCategories } from '../../../redux/apiCalls'
+
 import { PrimaryButton } from '../../Buttons'
 
 const Overlay = styled.div`
@@ -22,19 +27,28 @@ const Container = styled.div`
     }
 `
 
-const Card = ({ img, heading, desc }) => {
-  return (
-    <Container className='w-full lg:flex-1 h-[300px] lg:h-[600px] relative overflow-hidden'>
-        <Image src={img} alt={'jersey'} layout='fill' objectFit='cover' className='absolute rounded-md' />
-        <Overlay className='rounded-md'>
-            <div className='flex flex-col justify-end h-full px-8 py-4'>
-                <h1 className='text-white'>{heading}</h1>
-                <p className='text-white'>{desc}</p>
-                <PrimaryButton text='Shop Now' additionalClass='mt-4 w-fit' inverted={true}/>
-            </div>
-        </Overlay>
-    </Container>
-  )
+const Card = ({ img, heading, desc, slug }) => {
+    const router = useRouter()
+
+    const dispatch = useDispatch()
+    const handleClick = () => {
+        router.push(`/${slug}`)
+
+        getProductByCategories(dispatch, slug)        
+    }
+
+    return (
+        <Container className='w-full lg:flex-1 h-[300px] lg:h-[600px] relative overflow-hidden'>
+            <Image src={img} alt={'jersey'} layout='fill' objectFit='cover' className='absolute rounded-md' />
+            <Overlay className='rounded-md' onClick={handleClick}>
+                <div className='flex flex-col justify-end h-full px-8 py-4'>
+                    <h1 className='text-white'>{heading}</h1>
+                    <p className='text-white'>{desc}</p>
+                    <PrimaryButton text='Shop Now' additionalClass='mt-4 w-fit' inverted={true}/>
+                </div>
+            </Overlay>
+        </Container>
+    )
 }
 
 export default Card

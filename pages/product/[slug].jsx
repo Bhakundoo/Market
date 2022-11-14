@@ -55,21 +55,44 @@ const Sizes = styled.button`
         }
     }
 `
+const Error = styled.div`
+    background-color: red;
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+
+    position: absolute;
+    bottom: 2rem;
+    left: 45%;
+`
 
 const ProductDetail = () => {
-    const { productDesc, isFetching } = useSelector(state => state.products);``
+    const { productDesc, isFetching } = useSelector(state => state.products);
     const { products } = useSelector(state => state.cart);
+    const { token, isLogged } = useSelector(state => state.token);
+    const [error, setError] = useState(false);
+
     const dispatch = useDispatch();
 
     
     const router = useRouter();
-    const { slug } = router.query;
+    // const { slug } = router.query;
 
     // useEffect(() => {
     //     getProjectDetails(dispatch, slug);
     //     // console.log('Working')
     // }, [dispatch, slug])
     
+    useEffect(() => {
+        if(error) {
+            setTimeout(() => {
+                setError(false);
+            }, 3000)
+        }
+    })
+
     const [selectedVariant, setSelectedVariant] = useState({
         size: productDesc?.sizes[0],
         variant: productDesc?.variations[0],
@@ -105,10 +128,16 @@ const ProductDetail = () => {
         }
     }
     const addToCart = () => {
-        dispatch(addProduct({
-            productDesc, quantity
-        }))
+        if(isLogged) {
+            dispatch(addProduct({
+                productDesc, quantity
+            }))
+        }
+        else {
+            setError(true);
+        }
     }
+
 
     if(isFetching) {
         return (
@@ -140,10 +169,10 @@ const ProductDetail = () => {
                             </div>
                         </div>
 
-                        <div className='flex flex-col gap-y-4'>
+                        {/* <div className='flex flex-col gap-y-4'>
                             <h2>Ratings</h2>
                             <div className='flex gap-x-4 flex-wrap'>
-                                {/* <div className='flex items-center gap-x-2'>
+                                <div className='flex items-center gap-x-2'>
                                     {
                                         Array(Math.floor(productDesc?.rating))
                                         .fill()
@@ -159,9 +188,9 @@ const ProductDetail = () => {
                                         ))
                                     }
                                     <p>{productDesc?.rating}</p>
-                                </div> */}
+                                </div>
                             </div>
-                        </div>
+                        </div> */}
 
                         <div className='flex flex-col gap-y-4'>
                             <h2>Sizes</h2>
@@ -206,6 +235,13 @@ const ProductDetail = () => {
                     onClick={addToCart}
                     slug={productDesc?.slug}
                 />
+
+                {
+                    error &&
+                    <Error className='animate-slide-up'>
+                        Please login to add items to cart.
+                    </Error>
+                }
             </div>
         </>
     )

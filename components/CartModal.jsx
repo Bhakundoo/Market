@@ -14,10 +14,8 @@ import { removeProduct } from '../redux/features/cartSlice'
 const Backdrop = styled.div`
     background-color: ${props => props.theme.primary}25;
     backdrop-filter: blur(4px);
-    z-index: ${props => props.show ? 99 : -99};
     overflow: hidden;
-
-    opacity: ${props => props.show ? 1 : 0};
+    z-index: 99;
 `
 const Cart = styled.div`
     background-color: ${props => props.theme.body};
@@ -121,6 +119,18 @@ const CartModal = ({ show, onClose, setShow }) => {
     }
     const handleDecrease = () => {
         
+    }
+
+    if(products.length <= 0) {
+        return (
+            <Backdrop className='flex w-full h-screen fixed top-0 left-0 justify-end' show={show}>
+                <Cart className='h-full w-full md:w-1/2 xl:w-1/4 flex flex-col justify-center items-center animate-slide-left' show={show}>
+                    <img src='/icons/cart.svg' alt='Cart Icon' className='w-20 h-auto' />
+                    <p className='opacity-50'>So Empty.</p>
+                    <PrimaryButton onClick={() => {setShow({ ...show, cart: false })}} className='mt-4' text='Shop Now' additionalClass={'mt-4'}/>
+                </Cart>
+            </Backdrop>
+        )
     }
 
     return (
