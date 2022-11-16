@@ -4,8 +4,8 @@ import { useState } from 'react'
 import styled from 'styled-components'
 import { GoogleLogin } from 'react-google-login';
 
-import Login from './Login'
-import Register from './Register'
+// import Login from './Login'
+// import Register from './Register'
 import { AiOutlineClose, AiOutlineGoogle } from 'react-icons/ai';
 import { IconButton } from '../Buttons';
 import { storeToken } from '../../redux/features/tokenSlice';
@@ -45,14 +45,16 @@ const Modal = ({ onClose }) => {
     const responseGoogle = async (response) => {
         try {
             // dispatch()
-            await axiosInstance.post('/auth/google-login', { tokenId: response.tokenId })
+            const res = await axiosInstance.post('/auth/google-login', { tokenId: response.tokenId }).then(async() => {
+                const token = await axiosInstance.post('/user/refreshToken', undefined, {
+                    withCredentials: true
+                })
+                console.log(token)
+            })
+
             dispatch(storeToken(response.tokenId))
-            dispatch(getUserSuccess({
-                name: response.profileObj.name,
-                avatar: response.profileObj.imageUrl,
-                email: response.profileObj.email
-            })) 
-            onClose()           
+            dispatch(getUserSuccess(res.data)) 
+            // onClose()                    
         } catch (err) {
             console.log(err);
         }

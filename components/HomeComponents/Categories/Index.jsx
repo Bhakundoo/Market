@@ -15,7 +15,7 @@ const Index = () => {
   return (
     <div className='flex flex-col md:flex-row gap-4'>
       {
-        category.map((item, index) => (
+        category?.map((item, index) => (
           <Card
             key={index} 
             img={item.image} 
