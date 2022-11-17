@@ -44,17 +44,12 @@ const Modal = ({ onClose }) => {
     const dispatch = useDispatch();
     const responseGoogle = async (response) => {
         try {
-            // dispatch()
-            const res = await axiosInstance.post('/auth/google-login', { tokenId: response.tokenId }).then(async() => {
-                const token = await axiosInstance.post('/user/refreshToken', undefined, {
-                    withCredentials: true
-                })
-                console.log(token)
-            })
-
-            dispatch(storeToken(response.tokenId))
+            const res = await axiosInstance.post('/auth/google-login', { tokenId: response.tokenId })
+            
+            console.log(res.body)
+            dispatch(storeToken(res.body.accessToken))
             dispatch(getUserSuccess(res.data)) 
-            // onClose()                    
+            onClose()                    
         } catch (err) {
             console.log(err);
         }

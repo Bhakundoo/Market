@@ -164,7 +164,7 @@ const ProductDetail = () => {
                         <div className='pb-4 border-b-[1px] border-b-[#14141515]'>
                             <h1>{productDesc?.name}</h1>
                             <div className='flex justify-between'>
-                                <p>{productDesc?.category.name}</p>
+                                <p>{productDesc?.category?.name}</p>
                                 <ColoredText color={productDesc?.stock > 0}>{productDesc?.stock > 0 ? 'In Stock' : 'Out of Stock'}</ColoredText>
                             </div>
                         </div>
