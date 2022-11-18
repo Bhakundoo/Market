@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
@@ -8,8 +9,9 @@ import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
 import Tabbar from '../../components/ProductComponent/Tab/Tabbar';
 import HeadSeo from '../../layout/HeadSEO';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProjectDetails } from '../../redux/apiCalls';
+import { addToCart, getProjectDetails } from '../../redux/apiCalls';
 import { addProduct } from '../../redux/features/cartSlice';
+import axiosInstance from '../../utils/axios.config';
 
 const ColoredText = styled.p`
     color: ${props => props.color ? 'green' : 'red'};
@@ -96,7 +98,17 @@ const ProductDetail = () => {
     const [selectedVariant, setSelectedVariant] = useState({
         size: productDesc?.sizes[0],
         variant: productDesc?.variations[0],
+        image: '',
     });
+
+    useEffect(() => {
+        const displayImage = productDesc?.gallery[0].image;
+
+        setSelectedVariant({
+            ...selectedVariant,
+            image: displayImage,
+        })
+    }, [productDesc])
 
     const [quantity, setQuantity] = useState(1);
     const changeValue = (e) => {
@@ -127,11 +139,14 @@ const ProductDetail = () => {
             setQuantity(quantity - 1);
         }
     }
-    const addToCart = () => {
+    const handleAddToProduct = async() => {
+        console.log(productDesc._id)
+        console.log(quantity)
+
+        // const cartData = [{ product: productDesc._id, quantity: quantity }]
+        
         if(isLogged) {
-            dispatch(addProduct({
-                productDesc, quantity
-            }))
+            addToCart(dispatch, productDesc._id, quantity, token);
         }
         else {
             setError(true);
@@ -157,7 +172,7 @@ const ProductDetail = () => {
             <div className='w-full min-h-[650px] relative'>
                 <div className='w-full lg:w-[1366px] h-full mx-auto flex flex-col lg:flex-row gap-y-8 gap-x-16 mb-40'>
                     <div className='lg:flex-1 place-self-center'>
-                        <img src={productDesc?.gallery[0]?.image} alt={productDesc?.name} layout='fill' objectFit='contain' className='w-auto h-[200px] lg:h-[500px]'/>
+                        <img src={selectedVariant.image} alt={productDesc?.name} layout='fill' objectFit='contain' className='w-auto h-[200px] lg:h-[500px]'/>
                     </div>
 
                     <div className='lg:flex-1 flex flex-col gap-y-8'>
@@ -216,7 +231,7 @@ const ProductDetail = () => {
                                         key={index}
                                         selected={variant.toLocaleLowerCase() === (selectedVariant.variant).toLocaleLowerCase()}
                                         className='w-fit h-[40px] px-8 rounded-full border-[1px] border-[#14141515] flex items-center justify-center'
-                                        onClick={() => setSelectedVariant({...selectedVariant, variant: variant})}
+                                        onClick={() => setSelectedVariant({...selectedVariant, variant: variant, image: productDesc?.gallery[index]?.image})}
                                     >
                                         <span>{variant}</span>
                                     </Sizes>
@@ -232,7 +247,7 @@ const ProductDetail = () => {
                     changeQuantity={changeValue}
                     handleIncrease={increase}
                     handleDecrease={decrease}
-                    onClick={addToCart}
+                    onClick={handleAddToProduct}
                     slug={productDesc?.slug}
                 />
 

@@ -10,6 +10,7 @@ import { CiShare1, CiSearch } from 'react-icons/ci'
 import { BsHandbag } from 'react-icons/bs'
 import { PrimaryButton } from '../components/Buttons'
 import { removeToken } from '../redux/features/tokenSlice';
+import { logoutUser } from '../redux/features/userSlice';
 
 const Nav = styled.nav`
     background-color: ${props => props.theme.body};
@@ -82,8 +83,11 @@ const Navbar = ({ handleCart, handleLogin }) => {
         }
         return false;
     }
-
-    console.log(user, isLogged)
+    const handleLogout = () => {
+        dispatch(removeToken())
+        dispatch(logoutUser())
+        router.push('/')
+    }
 
     return (
         <Nav className='max-w-[1366px] mx-auto py-4 flex justify-between items-center sticky top-0 mb-12'>
@@ -121,7 +125,7 @@ const Navbar = ({ handleCart, handleLogin }) => {
                 {
                     isLogged ? 
                     // <PrimaryButton text='Logged in' onClick={() => dispatch(removeToken())} />
-                    <img src={user.avatar} className='w-12 h-12 rounded-full object-cover' alt={user.name} onClick={() => dispatch(removeToken())}/>
+                    <img src={user.avatar} className='w-12 h-12 rounded-full object-cover' alt={user.name} onClick={handleLogout}/>
                     :
                     <PrimaryButton text='Sign In' onClick={handleLogin} />
                 }

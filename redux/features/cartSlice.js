@@ -6,29 +6,34 @@ const cartSlice = createSlice({
         products: [],
         quantity: 0,
         total: 0,
-        product_quantity: {
-            product_slug: '',
-            quantity: 0
-        }
+        isFetching: false,
+        error: false,
     },
     reducers: {
+        cartStart: (state) => {
+            state.isFetching = true;
+            state.error = false;
+        },
         addProduct: (state, action) => {
+            state.isFetching = false;
+            state.error = false;
+            state.products = action.payload.product;
             state.quantity += 1;
-            state.products.push(action.payload.productDesc);
-            state.total += action.payload.productDesc.price * action.payload.quantity;
-            state.product_quantity.product_slug = action.payload.productDesc.slug;
-            state.product_quantity.quantity = action.payload.quantity;
-            console.log(action.payload.productDesc.price);
+            // state.total += action.payload.product.price;
         },
         removeProduct: (state, action) => {
             state.quantity -= 1;
-            state.products = state.products.filter(
-                (product) => product.slug !== action.payload.slug
-            );
-            state.total -= action.payload.productDesc.price * action.payload.quantity;
-        }
+            // state.total -= action.payload.price;
+            // state.products = state.products.filter((product) => product._id !== action.payload._id);
+            state.products = action.payload.product;
+            state.isFetching = false;
+        },
+        cartFailure: (state) => {
+            state.isFetching = false;
+            state.error = true;
+        },
     },
 });
 
-export const { addProduct, removeProduct } = cartSlice.actions
+export const { cartStart, addProduct, removeProduct, cartFailure } = cartSlice.actions
 export default cartSlice.reducer;

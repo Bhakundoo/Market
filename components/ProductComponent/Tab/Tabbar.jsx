@@ -52,18 +52,48 @@ const Icon = styled.div`
         color: ${props => props.theme.body};
     }
 `
+const Loading = styled.span`
+    display: inline-block;
+    transform: translateZ(1px);
+
+    &::after {
+        content: '';
+        display: inline-block;
+        width: 21px;
+        height: 21px;
+        margin: 8px;
+        border-radius: 50%;
+        background: #fff;
+        animation: coin-flip 2.4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    }
+    @keyframes coin-flip {
+        0%, 100% {
+            animation-timing-function: cubic-bezier(0.5, 0, 1, 0.5);
+        }
+        0% {
+            transform: rotateY(0deg);
+        }
+        50% {
+            transform: rotateY(1800deg);
+            animation-timing-function: cubic-bezier(0, 0.5, 0.5, 1);
+        }
+        100% {
+            transform: rotateY(3600deg);
+        }
+    }
+`
 
 const Tabbar = ({ price, quantity, changeQuantity, handleDecrease, handleIncrease, onClick, slug }) => {
-    const { products } = useSelector(state => state.cart)
+    const { products, isFetching } = useSelector(state => state.cart)
 
-    const [showButton, setShowButton] = useState(true)
+    // const [showButton, setShowButton] = useState(true)
 
-    useEffect(() => {
-        // if products includes the product, then hide the button
-        if (products.find(product => product.slug === slug)) {
-            setShowButton(false)
-        }
-    }, [products, slug])
+    // useEffect(() => {
+    //     // if products includes the product, then hide the button
+    //     if (products?.find(product => product.slug === slug)) {
+    //         setShowButton(false)
+    //     }
+    // }, [products, slug])
 
     return (
         <Tab className='w-full fixed bottom-0 left-1/2 -translate-x-1/2 z-20'>
@@ -87,10 +117,10 @@ const Tabbar = ({ price, quantity, changeQuantity, handleDecrease, handleIncreas
                         </Icon>
                     </div>
                     {
-                        showButton ?
-                        <PrimaryButton text='Add To Cart' inverted={true} onClick={onClick} />   
+                        isFetching ?
+                        <Loading />
                         :
-                        <DisabledButton text='Already In Cart' />
+                        <PrimaryButton text='Add To Cart' inverted={true} onClick={onClick} />   
                     }
                 </div>
             </Wrapper>

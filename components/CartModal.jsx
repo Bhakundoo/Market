@@ -111,16 +111,6 @@ const CartModal = ({ show, onClose, setShow }) => {
 
     const router = useRouter()
 
-    const changeQuantity = (e) => {
-        
-    }
-    const handleIncrease = () => {
-        
-    }
-    const handleDecrease = () => {
-        
-    }
-
     if(products.length <= 0) {
         return (
             <Backdrop className='flex w-full h-screen fixed top-0 left-0 justify-end' show={show}>
@@ -148,17 +138,22 @@ const CartModal = ({ show, onClose, setShow }) => {
                                 <Card key={index} className='flex gap-4 items-center'>
                                     <img src={item.gallery[0].image} alt={item.name} className='w-24 h-24 flex-shrink-0 object-cover' />
 
-                                    <div className='w-full flex flex-col gap-y-8'>
-                                        <div>
+                                    <div className='w-full flex flex-col gap-y-4'>
+                                        {/* <div className='flex flex-col justify-center gap-x-4'> */}
                                             <p className='font-normal'>{item.name}</p>
-                                            <div className='flex items-end'>
+                                            {/* <div className='flex items-end'>
                                                 <p className='font-light'>Rs.</p>
                                                 <h2 className='font-bold'>{item.price}</h2>
+                                            </div> */}
+                                            <Icon>
+                                                <AiOutlineDelete className='text-[21px] text-red-800' onClick={() => dispatch(removeProduct({
+                                                    _id: item._id,
+                                                    price: item.price
+                                                }))}/>
+                                            </Icon>
+                                        {/* </div> */}
 
-                                            </div>
-                                        </div>
-
-                                        <div className='flex justify-between items-center'>
+                                        {/* <div className='flex justify-between items-center'>
                                             <Quantity className='flex gap-x-4'>
                                                 <SmallIcon onClick={handleDecrease}>
                                                     <IoRemoveOutline />
@@ -176,7 +171,7 @@ const CartModal = ({ show, onClose, setShow }) => {
                                             <Icon>
                                                 <AiOutlineDelete className='text-[21px] text-red-800' onClick={() => dispatch(removeProduct(item.slug))}/>
                                             </Icon>
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </Card>
                             ))
