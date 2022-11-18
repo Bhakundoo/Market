@@ -1,5 +1,5 @@
 import axiosInstance from '../utils/axios.config';
-import { addProduct, cartStart } from './features/cartSlice';
+import { updateProduct, cartFailure, cartStart } from './features/cartSlice';
 import { getCategoryFailure, getCategoryStart, getCategorySuccess } from './features/categorySlice';
 import { getFeaturedProductsFailure, getFeaturedProductsStart, getFeaturedProductsSuccess } from './features/featuredSlice';
 import { getProductByCategorySuccess, getProductDescSuccess, getProductsFailure, getProductsStart, getProductsSuccess } from "./features/productsSlice";
@@ -59,16 +59,31 @@ export const getProductByCategories = async(dispatch, slug) => {
 export const addToCart = async(dispatch, product, quantity, token) => {
     dispatch(cartStart());
 
-    const data = [product, quantity];
+    const data = [{ product, quantity }];
     try {
         const res = await axiosInstance.post("/user/addcart", data, {
             headers: {
                 "Authorization": `${token}`
             }
         });
-        dispatch(addProduct(res.data.newcart));
-        // dispatch(addProduct(res.data.newCart));
-        console.log(res.data);
+        dispatch(updateProduct(res.data.newcart));
+        // dispatch(updateProduct(res.data.newCart));
+    } catch (err) {
+        dispatch(cartFailure());
+        console.log(err);
+    }
+}
+
+export const getCartItems = async(dispatch, token) => {
+    dispatch(cartStart());
+
+    try {
+        const res = await axiosInstance.get("/user/getcart", {
+            headers: {
+                "Authorization": `${token}`
+            }
+        });
+        dispatch(updateProduct(res.data.cart));
     } catch (err) {
         dispatch(cartFailure());
         console.log(err);

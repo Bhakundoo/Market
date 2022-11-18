@@ -11,6 +11,9 @@ import { BsHandbag } from 'react-icons/bs'
 import { PrimaryButton } from '../components/Buttons'
 import { removeToken } from '../redux/features/tokenSlice';
 import { logoutUser } from '../redux/features/userSlice';
+import { useEffect } from 'react';
+import { getCartItems } from '../redux/apiCalls';
+import { updateQuantity } from '../redux/features/cartSlice';
 
 const Nav = styled.nav`
     background-color: ${props => props.theme.body};
@@ -69,8 +72,8 @@ const SearchWrapper = styled.div`
 `
 const Navbar = ({ handleCart, handleLogin }) => {
     const { user } = useSelector(state => state.user)
-    const { isLogged } = useSelector(state => state.token)
-    const { quantity } = useSelector(state => state.cart)
+    const { isLogged, token } = useSelector(state => state.token)
+    const { products, quantity } = useSelector(state => state.cart)
     const router = useRouter();
 
     const dispatch = useDispatch();

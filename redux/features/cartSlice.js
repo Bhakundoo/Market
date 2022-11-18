@@ -14,19 +14,16 @@ const cartSlice = createSlice({
             state.isFetching = true;
             state.error = false;
         },
-        addProduct: (state, action) => {
+        updateProduct: (state, action) => {
             state.isFetching = false;
             state.error = false;
             state.products = action.payload.product;
-            state.quantity += 1;
             // state.total += action.payload.product.price;
         },
-        removeProduct: (state, action) => {
-            state.quantity -= 1;
-            // state.total -= action.payload.price;
-            // state.products = state.products.filter((product) => product._id !== action.payload._id);
-            state.products = action.payload.product;
+        updateQuantity: (state, action) => {
             state.isFetching = false;
+            state.error = false;
+            state.quantity = action.payload;
         },
         cartFailure: (state) => {
             state.isFetching = false;
@@ -35,5 +32,5 @@ const cartSlice = createSlice({
     },
 });
 
-export const { cartStart, addProduct, removeProduct, cartFailure } = cartSlice.actions
+export const { cartStart, updateProduct, updateQuantity, cartFailure } = cartSlice.actions
 export default cartSlice.reducer;

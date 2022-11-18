@@ -9,7 +9,7 @@ import { AiOutlineClose, AiOutlineDelete } from 'react-icons/ai'
 import { IoAddOutline, IoRemoveOutline } from 'react-icons/io5'
 
 import { PrimaryButton } from './Buttons'
-import { removeProduct } from '../redux/features/cartSlice'
+import { updateProduct } from '../redux/features/cartSlice'
 
 const Backdrop = styled.div`
     background-color: ${props => props.theme.primary}25;
@@ -33,6 +33,13 @@ const Cart = styled.div`
         font-size: 27px;
         color: ${props => props.theme.text};
     }
+
+    // no scrollbar for all browsers
+    &::-webkit-scrollbar {
+        display: none;
+    }
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 `
 const Card = styled.div`
     background-color: ${props => props.theme.white};
@@ -136,19 +143,19 @@ const CartModal = ({ show, onClose, setShow }) => {
                         {
                             products.map((item, index) => (
                                 <Card key={index} className='flex gap-4 items-center'>
-                                    <img src={item.gallery[0].image} alt={item.name} className='w-24 h-24 flex-shrink-0 object-cover' />
+                                    <img src={item.product.gallery[0].image} alt={item.product.name} className='w-24 h-24 flex-shrink-0 object-cover' />
 
                                     <div className='w-full flex flex-col gap-y-4'>
                                         {/* <div className='flex flex-col justify-center gap-x-4'> */}
-                                            <p className='font-normal'>{item.name}</p>
+                                            <p className='font-normal'>{item.product.name}</p>
                                             {/* <div className='flex items-end'>
                                                 <p className='font-light'>Rs.</p>
-                                                <h2 className='font-bold'>{item.price}</h2>
+                                                <h2 className='font-bold'>{item.product.price}</h2>
                                             </div> */}
                                             <Icon>
-                                                <AiOutlineDelete className='text-[21px] text-red-800' onClick={() => dispatch(removeProduct({
-                                                    _id: item._id,
-                                                    price: item.price
+                                                <AiOutlineDelete className='text-[21px] text-red-800' onClick={() => dispatch(updateProduct({
+                                                    _id: item.product._id,
+                                                    price: item.product.price
                                                 }))}/>
                                             </Icon>
                                         {/* </div> */}
@@ -169,7 +176,7 @@ const CartModal = ({ show, onClose, setShow }) => {
                                             </Quantity>
 
                                             <Icon>
-                                                <AiOutlineDelete className='text-[21px] text-red-800' onClick={() => dispatch(removeProduct(item.slug))}/>
+                                                <AiOutlineDelete className='text-[21px] text-red-800' onClick={() => dispatch(updateProduct(item.slug))}/>
                                             </Icon>
                                         </div> */}
                                     </div>
@@ -184,7 +191,12 @@ const CartModal = ({ show, onClose, setShow }) => {
                         <h2 className='font-normal'>Subtotal</h2>
                         <div className='flex items-center gap-x-2'>
                             <p className='font-light'>Rs.</p>
-                            <h1>{total}</h1>
+                            {/* calculate total of all items by formula price * quantity */}
+                            <h1>
+                                {
+                                    products.reduce((acc, item) => acc + (item.product.price * item.quantity), 0)
+                                }
+                            </h1>
                         </div>
                     </div>
 

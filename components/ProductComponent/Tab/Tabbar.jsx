@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { IoRemoveOutline, IoAddOutline } from 'react-icons/io5'
 
-import { DisabledButton, PrimaryButton, SecondaryButton } from '../../Buttons'
+import { PrimaryButton } from '../../Buttons'
 import { useSelector } from 'react-redux'
 
 const Tab = styled.div`

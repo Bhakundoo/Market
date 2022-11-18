@@ -46,6 +46,7 @@ const Modal = ({ onClose }) => {
         try {
             await axiosInstance.post('/auth/google-login', { tokenId: response.tokenId }).then(
                 res => {
+                    console.log(response.tokenId);
                     dispatch(storeToken(res.data.accessToken));
                     dispatch(getUserSuccess(res.data.user));
                 }

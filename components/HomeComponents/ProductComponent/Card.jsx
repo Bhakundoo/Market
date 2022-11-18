@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { AiOutlineHeart } from 'react-icons/ai'
 import { useRouter } from 'next/router'
-import { addProduct } from '../../../redux/features/cartSlice'
+import { updateProduct } from '../../../redux/features/cartSlice'
 import { getProjectDetails } from '../../../redux/apiCalls'
 import { useDispatch } from 'react-redux'
 

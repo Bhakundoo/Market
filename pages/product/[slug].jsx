@@ -10,7 +10,7 @@ import Tabbar from '../../components/ProductComponent/Tab/Tabbar';
 import HeadSeo from '../../layout/HeadSEO';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, getProjectDetails } from '../../redux/apiCalls';
-import { addProduct } from '../../redux/features/cartSlice';
+import { updateProduct } from '../../redux/features/cartSlice';
 import axiosInstance from '../../utils/axios.config';
 
 const ColoredText = styled.p`
