@@ -9,9 +9,10 @@ import { GoogleLogin } from 'react-google-login';
 import { AiOutlineClose, AiOutlineGoogle } from 'react-icons/ai';
 import { IconButton } from '../Buttons';
 import { storeToken } from '../../redux/features/tokenSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axiosInstance from '../../utils/axios.config';
 import { getUserSuccess } from '../../redux/features/userSlice';
+import { getCartItems } from '../../redux/apiCalls';
 
 const Backdrop = styled.div`
     background-color: ${props => props.theme.primary}25;
@@ -40,6 +41,7 @@ const Wrapper = styled.div`
 `
 
 const Modal = ({ onClose }) => {
+    const { token } = useSelector(state => state.token)
     // const [inLogin, setInLogin] = useState(true)
     const dispatch = useDispatch();
     const responseGoogle = async (response) => {
@@ -49,6 +51,7 @@ const Modal = ({ onClose }) => {
                     console.log(response.tokenId);
                     dispatch(storeToken(res.data.accessToken));
                     dispatch(getUserSuccess(res.data.user));
+                    getCartItems(dispatch, token)
                 }
             )
             onClose()                    

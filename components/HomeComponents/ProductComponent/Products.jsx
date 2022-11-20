@@ -38,7 +38,6 @@ const SkeletonBox = styled.div`
 const Products = () => {
   const { isFetching, products } = useSelector(state => state.products)
   const [currentPage, setCurrentPage] = useState(1)
-  console.log(products)
 
   const dispatch = useDispatch();
 

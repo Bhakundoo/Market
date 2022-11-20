@@ -1,5 +1,5 @@
 import axiosInstance from '../utils/axios.config';
-import { updateProduct, cartFailure, cartStart } from './features/cartSlice';
+import { updateProduct, cartFailure, cartStart, updateQuantity } from './features/cartSlice';
 import { getCategoryFailure, getCategoryStart, getCategorySuccess } from './features/categorySlice';
 import { getFeaturedProductsFailure, getFeaturedProductsStart, getFeaturedProductsSuccess } from './features/featuredSlice';
 import { getProductByCategorySuccess, getProductDescSuccess, getProductsFailure, getProductsStart, getProductsSuccess } from "./features/productsSlice";
@@ -56,10 +56,10 @@ export const getProductByCategories = async(dispatch, slug) => {
     }
 }
 
-export const addToCart = async(dispatch, product, quantity, token) => {
+export const addToCart = async(dispatch, product, quantity, size, variant, token) => {
     dispatch(cartStart());
 
-    const data = [{ product, quantity }];
+    const data = [{ product, quantity, size, variant }];
     try {
         const res = await axiosInstance.post("/user/addcart", data, {
             headers: {
@@ -67,6 +67,8 @@ export const addToCart = async(dispatch, product, quantity, token) => {
             }
         });
         dispatch(updateProduct(res.data.newcart));
+        getCartItems(dispatch, token);
+        // dispatch(updateQuantity());
         // dispatch(updateProduct(res.data.newCart));
     } catch (err) {
         dispatch(cartFailure());
@@ -83,7 +85,11 @@ export const getCartItems = async(dispatch, token) => {
                 "Authorization": `${token}`
             }
         });
-        dispatch(updateProduct(res.data.cart));
+        if(res.data.cart === null) {
+            dispatch(updateProduct([]));
+        } else {
+            dispatch(updateProduct(res.data.cart));
+        }
     } catch (err) {
         dispatch(cartFailure());
         console.log(err);

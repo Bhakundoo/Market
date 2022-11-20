@@ -9,8 +9,8 @@ import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
 import Tabbar from '../../components/ProductComponent/Tab/Tabbar';
 import HeadSeo from '../../layout/HeadSEO';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToCart, getProjectDetails } from '../../redux/apiCalls';
-import { updateProduct } from '../../redux/features/cartSlice';
+import { addToCart, getCartItems, getProducts, getProjectDetails } from '../../redux/apiCalls';
+import { updateProduct, updateQuantity } from '../../redux/features/cartSlice';
 import axiosInstance from '../../utils/axios.config';
 
 const ColoredText = styled.p`
@@ -140,13 +140,10 @@ const ProductDetail = () => {
         }
     }
     const handleAddToProduct = async() => {
-        console.log(productDesc._id)
-        console.log(quantity)
-
         // const cartData = [{ product: productDesc._id, quantity: quantity }]
-        
         if(isLogged) {
-            addToCart(dispatch, productDesc._id, quantity, token);
+            addToCart(dispatch, productDesc._id, quantity, selectedVariant.size, selectedVariant.variant, token);
+            getCartItems(dispatch, token);
         }
         else {
             setError(true);

@@ -7,6 +7,7 @@ import { PrimaryButton } from '../Buttons'
 
 import { AiOutlineInfoCircle } from 'react-icons/ai'
 import UserModal from './UserModal'
+import { useSelector } from 'react-redux'
 
 const Container = styled.div`
     scrollbar-width: none;
@@ -32,12 +33,15 @@ const Input = styled.input`
     }
 `
 
-const Form = ({ onOpen, dstate, dcity, dstreet }) => {
+const Form = ({ onOpen }) => {
     const [address, setAddress] = useState({
         state: '',
         city: '',
         street: '',
     })
+    const [phone, setPhone] = useState('')
+
+    const { products } = useSelector(state => state.cart);
 
     return (
         <Container className='flex-1 flex flex-col gap-y-12 overflow-auto'>
@@ -49,16 +53,16 @@ const Form = ({ onOpen, dstate, dcity, dstreet }) => {
                 <h2>Product Information</h2>
                 <div className='flex flex-col gap-y-4'>
                     {
-                        cartItems.map((item, index) => (
+                        products.map((item, index) => (
                             <Card key={index} className='flex gap-x-4 items-center'>
-                                <img src={item.img} alt={item.name} className='w-24 h-24 object-cover' />
+                                <img src={item.product.gallery[0].image} alt={item.product.name} className='w-24 h-24 object-cover' />
 
                                 <div className='flex flex-col gap-y-4'>
                                     <div>
-                                        <p>{item.name}</p>
+                                        <p>{item.product.name}</p>
                                         <p className='opacity-60'>x{item.quantity}</p>
                                     </div>
-                                    <h2>Rs. {item.price}</h2>
+                                    <h2>Rs. {item.product.price}</h2>
                                 </div>
                             </Card>
                         ))
@@ -68,15 +72,6 @@ const Form = ({ onOpen, dstate, dcity, dstreet }) => {
             <div className='flex flex-col gap-y-8'>
                 <div className='flex items-center justify-between'>
                     <h2>Shipping Information</h2>
-                    <p 
-                        className='underline italic cursor-pointer'
-                        onClick={() => setAddress({
-                            state: dstate,
-                            city: dcity,
-                            street: dstreet,
-                        })}
-                    >
-                        Use Registered Address</p>
                 </div>
                 <form className='flex flex-col gap-y-4'>
                     <div className='flex flex-col md:flex-row gap-8 flex-wrap'>
@@ -105,6 +100,15 @@ const Form = ({ onOpen, dstate, dcity, dstreet }) => {
                                 id='street'
                                 value={address.street}
                                 onChange={e => setAddress({...address, street: e.target.value})}
+                            />
+                        </div>
+                        <div className='flex flex-col'>
+                            <label htmlFor='phone'>Phone Number</label>
+                            <Input 
+                                type='tel'
+                                id='phone'
+                                value={phone}
+                                onChange={e => setPhone(e.target.value)}
                             />
                         </div>
                     </div>

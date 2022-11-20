@@ -10,6 +10,8 @@ import { IoAddOutline, IoRemoveOutline } from 'react-icons/io5'
 
 import { PrimaryButton } from './Buttons'
 import { updateProduct } from '../redux/features/cartSlice'
+import axiosInstance from '../utils/axios.config'
+import { getCartItems } from '../redux/apiCalls'
 
 const Backdrop = styled.div`
     background-color: ${props => props.theme.primary}25;
@@ -113,12 +115,26 @@ const Quantity = styled.div`
 `
 
 const CartModal = ({ show, onClose, setShow }) => {
-    const { products, total } = useSelector(state => state.cart)
+    const { products } = useSelector(state => state.cart)
+    const { token } = useSelector(state => state.token)
     const dispatch = useDispatch()
-
+    console.log(products);
     const router = useRouter()
 
-    if(products.length <= 0) {
+    const handleRemove = async(id) => {
+        try {
+            await axiosInstance.delete(`/user/delete/${id}`, {
+                headers: {
+                    'Authorization': `${token}`
+                }
+            })
+            getCartItems(dispatch, token)
+        }
+        catch(err) {
+
+        }
+    }
+    if(products === null || products === undefined) {
         return (
             <Backdrop className='flex w-full h-screen fixed top-0 left-0 justify-end' show={show}>
                 <Cart className='h-full w-full md:w-1/2 xl:w-1/4 flex flex-col justify-center items-center animate-slide-left' show={show}>
@@ -145,40 +161,15 @@ const CartModal = ({ show, onClose, setShow }) => {
                                 <Card key={index} className='flex gap-4 items-center'>
                                     <img src={item.product.gallery[0].image} alt={item.product.name} className='w-24 h-24 flex-shrink-0 object-cover' />
 
-                                    <div className='w-full flex flex-col gap-y-4'>
-                                        {/* <div className='flex flex-col justify-center gap-x-4'> */}
-                                            <p className='font-normal'>{item.product.name}</p>
-                                            {/* <div className='flex items-end'>
-                                                <p className='font-light'>Rs.</p>
-                                                <h2 className='font-bold'>{item.product.price}</h2>
-                                            </div> */}
+                                    <div className='w-full flex flex-col gap-y-1'>
+                                        <p>{item.product.name}</p>
+                                        <p className='opacity-50'>x{item.quantity}</p>
+                                        <div className='flex justify-between items-center'>
+                                            <h2>Rs{item.product.price}</h2>
                                             <Icon>
-                                                <AiOutlineDelete className='text-[21px] text-red-800' onClick={() => dispatch(updateProduct({
-                                                    _id: item.product._id,
-                                                    price: item.product.price
-                                                }))}/>
+                                                <AiOutlineDelete className='text-[21px] text-red-800' onClick={() => handleRemove(item.product._id)}/>
                                             </Icon>
-                                        {/* </div> */}
-
-                                        {/* <div className='flex justify-between items-center'>
-                                            <Quantity className='flex gap-x-4'>
-                                                <SmallIcon onClick={handleDecrease}>
-                                                    <IoRemoveOutline />
-                                                </SmallIcon>
-                                                <input 
-                                                    type='number'
-                                                    value={item.quantity}
-                                                    onChange={changeQuantity}
-                                                />
-                                                <SmallIcon onClick={handleIncrease}>
-                                                    <IoAddOutline />
-                                                </SmallIcon>
-                                            </Quantity>
-
-                                            <Icon>
-                                                <AiOutlineDelete className='text-[21px] text-red-800' onClick={() => dispatch(updateProduct(item.slug))}/>
-                                            </Icon>
-                                        </div> */}
+                                        </div>
                                     </div>
                                 </Card>
                             ))

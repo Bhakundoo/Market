@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 
 import Form from '../../components/CheckoutComponents/Form'
@@ -10,17 +11,19 @@ import HeadSEO from '../../layout/HeadSEO'
 
 const Checkout = () => {
   const [open, setOpen] = useState(false)
+  const { user, isFetching } = useSelector(state => state.user)
+  const { products, isFetching: cartFetching } = useSelector(state => state.cart)
 
-  const [user, setUser] = useState({
-    firstName: 'Hu',
-    lastName: 'Tao',
-    email: 'hu.tata@gmail.com',
-    phone: '9860****84',
-    street: 'Itumbahal',
-    city: 'Kathmandu',
-    state: 'Bagmati',
-    avatar: 'https://i.pinimg.com/236x/44/ba/aa/44baaae7802ad46ca09f041398b947e5.jpg'
-  })
+  if(isFetching || cartFetching) {
+    return (
+      <>
+        <HeadSEO title="Checkout" />
+        <div className='flex flex-col w-full h-screen items-center justify-center'>
+          <p>Loading...</p>
+        </div>
+      </>
+    )
+  }
 
   return (
     <>
@@ -32,25 +35,24 @@ const Checkout = () => {
         <div className='w-full h-[80vh] flex justify-between gap-x-12 overflow-hidden'>
           <Form 
             onOpen={() => setOpen(true)}
-            dcity={user.city}
-            dstate={user.state}
-            dstreet={user.street}
           />
           <UserSummary
-            firstName={user.firstName}
-            lastName={user.lastName}
-            phone={user.phone}
+            username={user.username}
+            email={user.email}
             avatar={user.avatar}
+            total={products.reduce((acc, item) => acc + (item.product.price * item.quantity), 0)}
+            vat={products.reduce((acc, item) => acc + (item.product.price * item.quantity), 0) * 0.13}
           />
         </div>
 
         {
           open &&
           <UserModal
-            firstName={user.firstName}
-            lastName={user.lastName}
-            phone={user.phone}
+            username={user.username}
+            email={user.email}
             avatar={user.avatar}
+            total={products.reduce((acc, item) => acc + (item.product.price * item.quantity), 0)}
+            vat={products.reduce((acc, item) => acc + (item.product.price * item.quantity), 0) * 0.13}
             show={open}
             onClose={() => setOpen(false)}
           />

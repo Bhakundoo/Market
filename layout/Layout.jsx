@@ -15,6 +15,7 @@ import { updateQuantity } from '../redux/features/cartSlice'
 
 import Global from '../styles/Global'
 import Navbar from './Navbar'
+import ResNavbar from './ResNavbar'
 
 const Root = styled.div`
   background-color: ${props => props.theme.body};
@@ -32,17 +33,7 @@ const Layout = ({ children }) => {
     cart: false,
   });
 
-  useEffect(() => {
-    const darkMode = localStorage.getItem('dark');
-    if (darkMode === null) {
-      localStorage.setItem('dark', 'false');
-    }
-    else if (darkMode === 'true') {
-      setTheme?.(themes.dark);
-    } else {
-      setTheme?.(themes.light);
-    }
-  }, [])
+  const [isResNav, setIsResNav] = useState(false);
 
   useEffect(() => {
     if(show.modal === true) {
@@ -55,23 +46,10 @@ const Layout = ({ children }) => {
 
   useEffect(() => {
     if(isLogged) {
-        getCartItems(dispatch, token)
-
-        if(products.length > 0) {
-          dispatch(updateQuantity(products.length))
-        }
+      getCartItems(dispatch, token)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [products])
+  }, [isLogged])
 
-  // useEffect(() => {
-  //   if(isLogged) {
-  //     if(products.length > 0) {
-  //       dispatch(updateQuantity(products.length))
-  //     }
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [isLogged])
 
   return (
     <ThemeProvider theme={theme}>
@@ -84,7 +62,8 @@ const Layout = ({ children }) => {
           {
             show.cart && <CartModal show={show.cart} setShow={setShow} onClose={() => setShow({ ...show, cart: false })} />
           }
-          <Navbar handleCart={() => setShow({ modal: false, cart: true })}  handleLogin={() => setShow({ cart: false, modal: true})} />
+          <Navbar handleCart={() => setShow({ modal: false, cart: true })}  handleLogin={() => setShow({ cart: false, modal: true})} openMenu={() => setIsResNav(true)} />
+          <ResNavbar show={isResNav} close={() => setIsResNav(false)}/>
           { children }
         </div>
       </Root>

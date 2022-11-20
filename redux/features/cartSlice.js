@@ -18,12 +18,25 @@ const cartSlice = createSlice({
             state.isFetching = false;
             state.error = false;
             state.products = action.payload.product;
+            // if products is empty, set quantity to 0
+            if(state.products === [] || state.products === null || state.products === undefined) {
+                state.quantity = 0;
+            } else {
+                state.quantity = state.products.length;
+            }
             // state.total += action.payload.product.price;
         },
-        updateQuantity: (state, action) => {
+        // updateQuantity: (state) => {
+        //     state.isFetching = false;
+        //     state.error = false;
+        //     state.quantity = (state.products).length;
+        // },
+        revertToInitialState: (state) => {
+            state.products = [];
+            state.quantity = 0;
+            state.total = 0;
             state.isFetching = false;
             state.error = false;
-            state.quantity = action.payload;
         },
         cartFailure: (state) => {
             state.isFetching = false;
@@ -32,5 +45,5 @@ const cartSlice = createSlice({
     },
 });
 
-export const { cartStart, updateProduct, updateQuantity, cartFailure } = cartSlice.actions
+export const { cartStart, updateProduct, revertToInitialState, cartFailure } = cartSlice.actions
 export default cartSlice.reducer;

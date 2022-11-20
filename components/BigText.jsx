@@ -15,13 +15,13 @@ const HeadingText = styled.h1`
   }
 
   @media (max-width: 480px) {
-    font-size: 4rem;
+    font-size: 2rem;
     letter-spacing: 1.25rem;
   }
 `
 const BigText = ({ text, additionalClass }) => {
   return (
-    <HeadingText className={`${additionalClass}`}>{text}</HeadingText>
+    <HeadingText className={`${additionalClass} truncate`}>{text}</HeadingText>
   )
 }
 

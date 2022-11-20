@@ -8,12 +8,13 @@ import styled from 'styled-components'
 
 import { CiShare1, CiSearch } from 'react-icons/ci'
 import { BsHandbag } from 'react-icons/bs'
+import { FiMenu } from 'react-icons/fi'
+
 import { PrimaryButton } from '../components/Buttons'
 import { removeToken } from '../redux/features/tokenSlice';
 import { logoutUser } from '../redux/features/userSlice';
-import { useEffect } from 'react';
-import { getCartItems } from '../redux/apiCalls';
-import { updateQuantity } from '../redux/features/cartSlice';
+
+import { revertToInitialState, updateProduct } from '../redux/features/cartSlice';
 
 const Nav = styled.nav`
     background-color: ${props => props.theme.body};
@@ -21,7 +22,6 @@ const Nav = styled.nav`
 `
 const ListItems = styled.li`
     list-style: none;
-    display: flex;
     align-items: center;
     gap: 0.5rem;
 
@@ -70,11 +70,13 @@ const SearchWrapper = styled.div`
         }
     }
 `
-const Navbar = ({ handleCart, handleLogin }) => {
+const Navbar = ({ handleCart, handleLogin, openMenu }) => {
     const { user } = useSelector(state => state.user)
-    const { isLogged, token } = useSelector(state => state.token)
-    const { products, quantity } = useSelector(state => state.cart)
+    const { isLogged } = useSelector(state => state.token)
+    const { quantity } = useSelector(state => state.cart)
     const router = useRouter();
+
+    console.log(quantity)
 
     const dispatch = useDispatch();
 
@@ -89,6 +91,7 @@ const Navbar = ({ handleCart, handleLogin }) => {
     const handleLogout = () => {
         dispatch(removeToken())
         dispatch(logoutUser())
+        dispatch(revertToInitialState())
         router.push('/')
     }
 
@@ -110,17 +113,17 @@ const Navbar = ({ handleCart, handleLogin }) => {
                 <CiSearch />
             </SearchWrapper>
 
-            <div className='hidden lg:flex gap-x-16 items-center'>
+            <div className='flex gap-x-8 lg:gap-x-16 items-center'>
                 <ul className='flex gap-x-8'>
-                    <ListItems active={getActive('/market')}>
+                    <ListItems className='hidden lg:flex' active={getActive('/market')}>
                         <CiShare1 />
                         <p>Leagues</p>
                     </ListItems>
                     
-                    <ListItems>
+                    <ListItems className='flex'>
                         <div className='relative cursor-pointer' onClick={handleCart}>
                             <BsHandbag />
-                            <span className='absolute -top-1 -right-1 bg-red-500 rounded-full w-4 h-4 text-white font-medium flex items-center justify-center text-[14px]'>{quantity}</span>
+                            <span className='absolute -top-1 -right-1 bg-red-500 rounded-full w-4 h-4 text-white font-medium flex items-center justify-center text-[14px]'>{quantity === undefined ? 0 : quantity}</span>
                         </div>
                     </ListItems>
                 </ul>
@@ -128,11 +131,13 @@ const Navbar = ({ handleCart, handleLogin }) => {
                 {
                     isLogged ? 
                     // <PrimaryButton text='Logged in' onClick={() => dispatch(removeToken())} />
-                    <img src={user.avatar} className='w-12 h-12 rounded-full object-cover' alt={user.name} onClick={handleLogout}/>
+                    <img src={user.avatar} className='w-8 h-8 lg:w-12 lg:h-12 rounded-full object-cover' alt={user.name} onClick={handleLogout}/>
                     :
                     <PrimaryButton text='Sign In' onClick={handleLogin} />
                 }
             </div>
+
+            {/* <FiMenu className='lg:hidden text-[21px]' onClick={openMenu}/> */}
         </Nav>
     )
 }
