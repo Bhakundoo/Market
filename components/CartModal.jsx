@@ -76,43 +76,6 @@ const Icon = styled.div`
         transform: scale(2.5);
     }
 `
-const SmallIcon = styled.div`
-    background-color: ${props => props.theme.primary}25;
-    border-radius: 4px;
-    padding: 0.25rem;
-
-    &:hover {
-        background-color: ${props => props.theme.primary}50;
-    }
-
-    svg {
-        font-size: 16px;
-        color: ${props => props.theme.text};
-    }
-`
-const Quantity = styled.div`
-    input {
-        width: 2rem;
-        text-align: center;
-        border-bottom: 1px solid ${props => props.theme.primary};
-        background-color: transparent;
-        color: ${props => props.theme.primary};
-
-        &:focus {
-            outline: none;
-        }
-
-        &::-webkit-outer-spin-button,
-        &::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-            display: none;
-        }
-        &[type=number] {
-            -moz-appearance: textfield;
-        }
-    }
-`
 
 const CartModal = ({ show, onClose, setShow }) => {
     const { products } = useSelector(state => state.cart)
@@ -167,7 +130,7 @@ const CartModal = ({ show, onClose, setShow }) => {
                                         <div className='flex justify-between items-center'>
                                             <h2>Rs{item.product.price}</h2>
                                             <Icon>
-                                                <AiOutlineDelete className='text-[21px] text-red-800' onClick={() => handleRemove(item.product._id)}/>
+                                                <AiOutlineDelete className='text-[21px] text-red-800' onClick={() => handleRemove(item._id)}/>
                                             </Icon>
                                         </div>
                                     </div>

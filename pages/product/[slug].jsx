@@ -142,8 +142,15 @@ const ProductDetail = () => {
     const handleAddToProduct = async() => {
         // const cartData = [{ product: productDesc._id, quantity: quantity }]
         if(isLogged) {
-            addToCart(dispatch, productDesc._id, quantity, selectedVariant.size, selectedVariant.variant, token);
-            getCartItems(dispatch, token);
+            // if item is in cart already then update quantity
+            const isItemInCart = products.find(item => item.product._id === productDesc._id);
+            if(isItemInCart) {
+                alert('Item is in cart already');
+            }
+            else {
+                addToCart(dispatch, productDesc._id, quantity, selectedVariant.size, selectedVariant.variant, token);
+                getCartItems(dispatch, token);
+            }
         }
         else {
             setError(true);
