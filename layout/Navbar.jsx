@@ -1,5 +1,6 @@
+/* eslint-disable react/jsx-key */
 /* eslint-disable @next/next/no-img-element */
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { useDispatch, useSelector } from 'react-redux';
@@ -70,10 +71,25 @@ const SearchWrapper = styled.div`
         }
     }
 `
+const Results = styled.div`
+    background-color: ${props => props.theme.body};
+    border: 0.5px solid ${props => props.theme.text}50;
+`
+const Item = styled.div`
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+    border-radius: 6px;
+
+    &:hover {
+        background-color: ${props => props.theme.text}15;
+    }
+
+`
 const Navbar = ({ handleCart, handleLogin, openMenu }) => {
     const { user } = useSelector(state => state.user)
     const { isLogged } = useSelector(state => state.token)
     const { quantity } = useSelector(state => state.cart)
+    const { products } = useSelector(state => state.products)
     const router = useRouter();
 
     console.log(quantity)
@@ -81,6 +97,18 @@ const Navbar = ({ handleCart, handleLogin, openMenu }) => {
     const dispatch = useDispatch();
 
     const [search, setSearch] = useState('');
+
+    const [searchResult, setSearchResult] = useState([]);
+
+    useEffect(() => {
+        if (search === '') {
+            setSearchResult([])
+        }
+        else {
+            const result = products.filter(product => product.name.toLowerCase().includes(search.toLowerCase()))
+            setSearchResult(result)
+        }
+    }, [products, search])
 
     const getActive = (path) => {
         if (router.pathname === path) {
@@ -111,6 +139,23 @@ const Navbar = ({ handleCart, handleLogin, openMenu }) => {
                     onChange={(e) => setSearch(e.target.value)}
                 />
                 <CiSearch />
+                {
+                    searchResult.length > 0 && 
+                    <Results className='flex flex-col gap-y-4 rounded-md absolute top-14 w-full'>
+                        {
+                            searchResult.map((product, index) => (
+                                <Item className='flex gap-x-4 items-center' key={index}>
+                                    <img src={product.gallery[0].image} alt={product.name} className='h-16 w-16' />
+
+                                    <div className='flex flex-col'>
+                                        <p>{product.name}</p>
+                                        <h2>Rs. {product.price}</h2>
+                                    </div>
+                                </Item>
+                            ))
+                        }
+                    </Results>
+                }
             </SearchWrapper>
 
             <div className='flex gap-x-8 lg:gap-x-16 items-center'>

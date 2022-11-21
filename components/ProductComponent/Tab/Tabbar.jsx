@@ -52,7 +52,7 @@ const Icon = styled.div`
         color: ${props => props.theme.body};
     }
 `
-const Loading = styled.span`
+export const Loading = styled.span`
     display: inline-block;
     transform: translateZ(1px);
 

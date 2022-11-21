@@ -128,7 +128,7 @@ const CartModal = ({ show, onClose, setShow }) => {
                                         <p>{item.product.name}</p>
                                         <p className='opacity-50'>x{item.quantity}</p>
                                         <div className='flex justify-between items-center'>
-                                            <h2>Rs{item.product.price}</h2>
+                                            <h2>Rs {item.product.price}</h2>
                                             <Icon>
                                                 <AiOutlineDelete className='text-[21px] text-red-800' onClick={() => handleRemove(item._id)}/>
                                             </Icon>

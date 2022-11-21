@@ -1,6 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
+
+import axiosInstance from '../../utils/axios.config'
 
 import { cartItems } from '../../data/cartItems'
 import { PrimaryButton } from '../Buttons'
@@ -8,6 +10,9 @@ import { PrimaryButton } from '../Buttons'
 import { AiOutlineInfoCircle } from 'react-icons/ai'
 import UserModal from './UserModal'
 import { useSelector } from 'react-redux'
+import { useRef } from 'react'
+import { sendMail } from '../../utils/sendMail'
+import { Loading } from '../ProductComponent/Tab/Tabbar'
 
 const Container = styled.div`
     scrollbar-width: none;
@@ -22,6 +27,7 @@ const Card = styled.div`
     padding: 1rem;
 `
 const Input = styled.input`
+    flex: 1;
     background-color: ${props => props.theme.body};
     border: 1px solid ${props => props.theme.primary}50;
     border-radius: 8px;
@@ -32,16 +38,94 @@ const Input = styled.input`
         border: 1px solid ${props => props.theme.primary};
     }
 `
+const Message = styled.div`
+    background-color: ${props => props.color === 'error' ? '#f01a2925' : '#1af06b25'};
+    border-radius: 8px;
+    flex: 1;
+    color: ${props => props.color === 'error' ? '#f01a29' : '#1af06b'};
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 400;
+`
 
 const Form = ({ onOpen }) => {
-    const [address, setAddress] = useState({
-        state: '',
+    const { products } = useSelector(state => state.cart);
+    const { user } = useSelector(state => state.user);
+    const { token } = useSelector(state => state.token);
+    
+    const [ loading, setLoading ] = useState(false)
+    const [ data, setData ] = useState({
+        email: user.email,
+        phone: '',
         city: '',
         street: '',
+        product_name: products.map(item => item.product.name).join(', '),
+        size: products.map(item => item.size).join(', '),
+        variant: products.map(item => item.variant).join(', '),
     })
-    const [phone, setPhone] = useState('')
 
-    const { products } = useSelector(state => state.cart);
+    const formRef = useRef()
+
+    const [message, setMessage] = useState({
+        severity: 'warning',
+        text: '',
+    })
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        if(data.city === '' || data.street === '' || data.phone === '') {
+            setMessage({
+                type: 'error',
+                text: 'Please fill in all fields',
+            })
+            return
+        }
+
+        try {
+            setLoading(true)
+            const res = await axiosInstance.post('/user/order', {
+                city: data.city, 
+                street: data.street, 
+                phone: data.phone, 
+            }, {
+                headers: {
+                    'Authorization': `${token}`
+                }
+            })
+            if(res.status === 200) {
+                setTimeout(() => {
+                    setMessage({
+                        type: 'success',
+                        text: 'Order placed successfully',
+                    })
+                    sendMail(setData, formRef, setLoading, setMessage)
+                }, 2500)
+            }
+        }
+        catch(err) {
+            setLoading(false)
+            console.log(err)
+            setMessage({
+                type: 'error',
+                text: err.response.data.message,
+            })
+        }
+    }
+
+    useEffect(() => {
+        if(message.text !== ''){
+            setTimeout(() => {
+                setMessage({
+                    type: '',
+                    text: '',
+                })
+            }, 3000)
+        }
+    }, [message.text])
 
     return (
         <Container className='flex-1 flex flex-col gap-y-12 overflow-auto'>
@@ -73,47 +157,48 @@ const Form = ({ onOpen }) => {
                 <div className='flex items-center justify-between'>
                     <h2>Shipping Information</h2>
                 </div>
-                <form className='flex flex-col gap-y-4'>
-                    <div className='flex flex-col md:flex-row gap-8 flex-wrap'>
-                        <div className='flex flex-col'>
-                            <label htmlFor='state'>State</label>
-                            <Input 
-                                type='text'
-                                id='state'
-                                value={address.state}
-                                onChange={e => setAddress({...address, state: e.target.value})}
-                            />
-                        </div>
-                        <div className='flex flex-col'>
+                <form className='flex flex-col gap-y-4' ref={formRef} onSubmit={handleSubmit}>
+                    <div className='flex flex-col md:flex-row gap-x-8 gap-y-4 flex-wrap'>
+                        <div className='flex-1 flex flex-col'>
                             <label htmlFor='city'>City</label>
                             <Input 
                                 type='text'
                                 id='city'
-                                value={address.city}
-                                onChange={e => setAddress({...address, city: e.target.value})}
+                                value={data.city}
+                                onChange={e => setData({...data, city: e.target.value})}
                             />
                         </div>
-                        <div className='flex flex-col'>
+                        <div className='flex-1 flex flex-col'>
                             <label htmlFor='street'>Street</label>
                             <Input 
                                 type='text'
                                 id='street'
-                                value={address.street}
-                                onChange={e => setAddress({...address, street: e.target.value})}
+                                value={data.street}
+                                onChange={e => setData({...data, street: e.target.value})}
                             />
                         </div>
-                        <div className='flex flex-col'>
+                        <div className='flex-1 flex flex-col'>
                             <label htmlFor='phone'>Phone Number</label>
                             <Input 
                                 type='tel'
                                 id='phone'
-                                value={phone}
-                                onChange={e => setPhone(e.target.value)}
+                                value={data.phone}
+                                onChange={e => setData({...data, phone: e.target.value})}
                             />
                         </div>
                     </div>
-
-                    <PrimaryButton text={'Place Order'} additionalClass='w-fit mt-8'/>
+                    <div className='flex-1 flex gap-x-8 mt-8'>
+                        {
+                            loading ? 
+                            <Loading />
+                            :
+                            <PrimaryButton text={'Place Order'} additionalClass='w-fit'/>
+                        }
+                        {
+                            message.text !== '' && 
+                            <Message color={message.type}>{message.text}</Message>
+                        }
+                    </div>
                 </form>
             </div>
         </Container>
