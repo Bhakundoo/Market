@@ -16,6 +16,7 @@ import { removeToken } from '../redux/features/tokenSlice';
 import { logoutUser } from '../redux/features/userSlice';
 
 import { revertToInitialState, updateProduct } from '../redux/features/cartSlice';
+import { getProjectDetails } from '../redux/apiCalls';
 
 const Nav = styled.nav`
     background-color: ${props => props.theme.body};
@@ -123,6 +124,12 @@ const Navbar = ({ handleCart, handleLogin, openMenu }) => {
         router.push('/')
     }
 
+    const handleDetails = (link) => {
+        setSearch('')
+        router.push(`/product/${link}`);
+        getProjectDetails(dispatch, link)
+    }
+
     return (
         <Nav className='max-w-[1366px] mx-auto py-4 flex justify-between items-center sticky top-0 mb-12'>
             <Link href='/'>
@@ -144,7 +151,7 @@ const Navbar = ({ handleCart, handleLogin, openMenu }) => {
                     <Results className='flex flex-col gap-y-4 rounded-md absolute top-14 w-full'>
                         {
                             searchResult.map((product, index) => (
-                                <Item className='flex gap-x-4 items-center' key={index}>
+                                <Item className='flex gap-x-4 items-center' key={index} onClick={() => handleDetails(product.slug)}>
                                     <img src={product.gallery[0].image} alt={product.name} className='h-16 w-16' />
 
                                     <div className='flex flex-col'>

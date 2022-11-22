@@ -5,7 +5,7 @@ import { getCategories } from '../../../redux/apiCalls'
 import Card from './Card'
 
 const Index = () => {
-  const { isFetching, category } = useSelector(state => state.category)
+  const { category } = useSelector(state => state.category)
   const dispatch = useDispatch();
 
   useEffect(() => {
