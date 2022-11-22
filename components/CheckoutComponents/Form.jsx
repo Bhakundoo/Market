@@ -8,11 +8,11 @@ import { cartItems } from '../../data/cartItems'
 import { PrimaryButton } from '../Buttons'
 
 import { AiOutlineInfoCircle } from 'react-icons/ai'
-import UserModal from './UserModal'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useRef } from 'react'
 import { sendMail } from '../../utils/sendMail'
 import { Loading } from '../ProductComponent/Tab/Tabbar'
+import { getCartItems } from '../../redux/apiCalls'
 
 const Container = styled.div`
     scrollbar-width: none;
@@ -56,6 +56,8 @@ const Form = ({ onOpen }) => {
     const { user } = useSelector(state => state.user);
     const { token } = useSelector(state => state.token);
     
+    const dispatch = useDispatch();
+
     const [ loading, setLoading ] = useState(false)
     const [ data, setData ] = useState({
         email: user.email,
@@ -97,6 +99,7 @@ const Form = ({ onOpen }) => {
                 }
             })
             if(res.status === 200) {
+                getCartItems(dispatch, token)
                 setTimeout(() => {
                     setMessage({
                         type: 'success',
@@ -123,7 +126,7 @@ const Form = ({ onOpen }) => {
                     type: '',
                     text: '',
                 })
-            }, 3000)
+            }, 5000)
         }
     }, [message.text])
 
@@ -139,7 +142,11 @@ const Form = ({ onOpen }) => {
                     {
                         products.map((item, index) => (
                             <Card key={index} className='flex gap-x-4 items-center'>
-                                <img src={item.product.gallery[0].image} alt={item.product.name} className='w-24 h-24 object-cover' />
+                                <img 
+                                    src={item.variant === 'Home' ? item.product.gallery[0].image : item.variant === 'Away' ? item.product.gallery[1].image : item.product.gallery[2].image}
+                                    alt={item.product.name} 
+                                    className='w-24 h-24 object-cover' 
+                                />
 
                                 <div className='flex flex-col gap-y-4'>
                                     <div>

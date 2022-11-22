@@ -93,8 +93,6 @@ const Navbar = ({ handleCart, handleLogin, openMenu }) => {
     const { products } = useSelector(state => state.products)
     const router = useRouter();
 
-    console.log(quantity)
-
     const dispatch = useDispatch();
 
     const [search, setSearch] = useState('');

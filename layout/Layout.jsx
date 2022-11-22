@@ -9,9 +9,10 @@ import Modal from '../components/Auth/Modal'
 import CartModal from '../components/CartModal'
 
 import { useThemeContext } from '../context/ThemeContextProvider'
-import { themes } from '../context/Themes'
 import { getCartItems } from '../redux/apiCalls'
-import { updateQuantity } from '../redux/features/cartSlice'
+import { revertToInitialState } from '../redux/features/cartSlice'
+import { removeToken } from '../redux/features/tokenSlice'
+import { logoutUser } from '../redux/features/userSlice'
 
 import Global from '../styles/Global'
 import Navbar from './Navbar'
@@ -24,6 +25,7 @@ const Root = styled.div`
 const Layout = ({ children }) => {
   const { isLogged, token } = useSelector(state => state.token)
   const { products, isFetching } = useSelector(state => state.cart)
+  const [close, setClose] = useState(false)
   
   const dispatch = useDispatch()
 
@@ -49,7 +51,6 @@ const Layout = ({ children }) => {
       getCartItems(dispatch, token)
     }
   }, [isLogged])
-
 
   return (
     <ThemeProvider theme={theme}>

@@ -97,7 +97,7 @@ const CartModal = ({ show, onClose, setShow }) => {
 
         }
     }
-    if(products === null || products === undefined) {
+    if(products === null || products === undefined || products.length === 0) {
         return (
             <Backdrop className='flex w-full h-screen fixed top-0 left-0 justify-end' show={show}>
                 <Cart className='h-full w-full md:w-1/2 xl:w-1/4 flex flex-col justify-center items-center animate-slide-left' show={show}>
@@ -122,7 +122,11 @@ const CartModal = ({ show, onClose, setShow }) => {
                         {
                             products.map((item, index) => (
                                 <Card key={index} className='flex gap-4 items-center'>
-                                    <img src={item.product.gallery[0].image} alt={item.product.name} className='w-24 h-24 flex-shrink-0 object-cover' />
+                                    <img 
+                                        src={item.variant === 'Home' ? item.product.gallery[0].image : item.variant === 'Away' ? item.product.gallery[1].image : item.product.gallery[2].image} 
+                                        alt={item.product.name} 
+                                        className='w-24 h-24 flex-shrink-0 object-cover' 
+                                    />
 
                                     <div className='w-full flex flex-col gap-y-1'>
                                         <p>{item.product.name}</p>

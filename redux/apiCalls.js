@@ -1,5 +1,5 @@
 import axiosInstance from '../utils/axios.config';
-import { updateProduct, cartFailure, cartStart, updateQuantity } from './features/cartSlice';
+import { updateProduct, cartFailure, cartStart, updateQuantity, revertToInitialState } from './features/cartSlice';
 import { getCategoryFailure, getCategoryStart, getCategorySuccess } from './features/categorySlice';
 import { getFeaturedProductsFailure, getFeaturedProductsStart, getFeaturedProductsSuccess } from './features/featuredSlice';
 import { getProductByCategorySuccess, getProductDescSuccess, getProductsFailure, getProductsStart, getProductsSuccess } from "./features/productsSlice";
@@ -86,7 +86,7 @@ export const getCartItems = async(dispatch, token) => {
             }
         });
         if(res.data.cart === null) {
-            dispatch(updateProduct([]));
+            dispatch(revertToInitialState());
         } else {
             dispatch(updateProduct(res.data.cart));
         }

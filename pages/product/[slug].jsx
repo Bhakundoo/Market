@@ -143,7 +143,7 @@ const ProductDetail = () => {
         // const cartData = [{ product: productDesc._id, quantity: quantity }]
         if(isLogged) {
             // if item is in cart already then update quantity
-            const isItemInCart = products.find(item => item.product._id === productDesc._id);
+            const isItemInCart = products?.find(item => item.product._id === productDesc._id);
             if(isItemInCart) {
                 alert('Item is in cart already');
             }
